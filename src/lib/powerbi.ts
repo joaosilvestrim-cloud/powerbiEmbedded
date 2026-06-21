@@ -36,6 +36,62 @@ async function getAadToken(cred: PbiCredenciais): Promise<string> {
   return json.access_token as string;
 }
 
+export interface PbiWorkspace {
+  id: string;
+  name: string;
+}
+
+export interface PbiReport {
+  id: string;
+  name: string;
+  webUrl?: string;
+}
+
+// Testa as credenciais e lista os workspaces (groups) visíveis ao
+// service principal. Lança erro com a mensagem do Power BI se falhar.
+export async function listWorkspaces(
+  cred: PbiCredenciais
+): Promise<PbiWorkspace[]> {
+  const aadToken = await getAadToken(cred);
+  const res = await fetch(`${PBI_API}/groups`, {
+    headers: { Authorization: `Bearer ${aadToken}` },
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Power BI ${res.status}: ${text}`);
+  }
+  const json = await res.json();
+  return (json.value ?? []).map((g: { id: string; name: string }) => ({
+    id: g.id,
+    name: g.name,
+  }));
+}
+
+// Lista os relatórios de um workspace.
+export async function listReports(
+  cred: PbiCredenciais,
+  workspaceId: string
+): Promise<PbiReport[]> {
+  const aadToken = await getAadToken(cred);
+  const res = await fetch(`${PBI_API}/groups/${workspaceId}/reports`, {
+    headers: { Authorization: `Bearer ${aadToken}` },
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Power BI ${res.status}: ${text}`);
+  }
+  const json = await res.json();
+  return (json.value ?? []).map(
+    (r: { id: string; name: string; webUrl?: string }) => ({
+      id: r.id,
+      name: r.name,
+      webUrl: r.webUrl,
+    })
+  );
+}
+
 interface ReportInfo {
   embedUrl: string;
   datasetId: string;

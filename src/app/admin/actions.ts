@@ -31,6 +31,31 @@ export async function criarRelatorio(formData: FormData) {
   revalidatePath("/admin");
 }
 
+// Importa um relatório direto do Power BI (usado pelo importador).
+// Evita duplicar se já existir o mesmo report no mesmo workspace.
+export async function importarRelatorio(
+  nome: string,
+  workspaceId: string,
+  reportId: string
+) {
+  const supabase = await assertAdmin();
+  const { data: existe } = await supabase
+    .from("relatorios")
+    .select("id")
+    .eq("pbi_workspace_id", workspaceId)
+    .eq("pbi_report_id", reportId)
+    .maybeSingle();
+  if (existe) return { jaExiste: true };
+
+  await supabase.from("relatorios").insert({
+    nome,
+    pbi_workspace_id: workspaceId,
+    pbi_report_id: reportId,
+  });
+  revalidatePath("/admin/relatorios");
+  return { jaExiste: false };
+}
+
 export async function toggleRelatorio(id: string, ativo: boolean) {
   const supabase = await assertAdmin();
   await supabase.from("relatorios").update({ ativo }).eq("id", id);

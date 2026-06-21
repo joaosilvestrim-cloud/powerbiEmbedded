@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
 import { getProfile } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import Nav from "@/components/Nav";
+import AppShell from "@/components/AppShell";
 import ReportViewer from "@/components/ReportViewer";
 import type { Relatorio } from "@/lib/types";
 
@@ -27,23 +28,20 @@ export default async function RelatorioPage({
   const relatorio = data as Relatorio;
 
   return (
-    <>
-      <Nav profile={profile} />
-      <main className="max-w-6xl mx-auto px-4 py-6 w-full">
-        <div className="mb-4">
-          <Link href="/" className="text-sm text-slate-500 hover:text-slate-700">
-            ← Voltar
-          </Link>
-          <h1 className="text-xl font-semibold text-slate-800 mt-1">
-            {relatorio.nome}
-          </h1>
-          {relatorio.descricao && (
-            <p className="text-sm text-slate-500">{relatorio.descricao}</p>
-          )}
-        </div>
-
-        <ReportViewer relatorioId={relatorio.id} />
-      </main>
-    </>
+    <AppShell
+      profile={profile}
+      title={relatorio.nome}
+      subtitle={relatorio.descricao || undefined}
+      actions={
+        <Link
+          href="/"
+          className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 px-3 py-1.5 text-sm text-slate-600 hover:bg-slate-50"
+        >
+          <ArrowLeft className="h-4 w-4" /> Voltar
+        </Link>
+      }
+    >
+      <ReportViewer relatorioId={relatorio.id} />
+    </AppShell>
   );
 }

@@ -43,25 +43,37 @@ Admins enxergam todos os relatórios; usuários comuns só os liberados em
 ## 2. Configurar o Power BI / Azure (frente Microsoft)
 
 > Resumo. Esses passos exigem conta/admin do tenant e podem ter custo.
+> As credenciais NÃO vão em variável de ambiente — são cadastradas dentro do
+> app em **Administração → Power BI** (tabela `config_powerbi`).
 
 1. **Power BI Pro** para publicar os relatórios em um workspace.
 2. **Azure AD → App registrations**: registre um app → isso cria o
-   *service principal*. Gere um **client secret**. Anote:
-   - Directory (tenant) ID → `PBI_TENANT_ID`
-   - Application (client) ID → `PBI_CLIENT_ID`
-   - Secret → `PBI_CLIENT_SECRET`
+   *service principal*. Gere um **client secret**. Anote Tenant ID,
+   Client ID e o Secret.
 3. **Power BI Admin Portal → Tenant settings**: habilite
    *"Service principals can use Power BI APIs"* e adicione o app a um grupo de
    segurança permitido.
 4. **Capacidade**: associe o workspace a uma capacidade **Fabric (F-SKU)** ou
    **Power BI Embedded (A-SKU)** — necessária para embed externo.
 5. No **workspace**, adicione o service principal como **Membro/Admin**.
-6. Em cada relatório, pegue o **Workspace (group) ID** e o **Report ID**
-   (estão na URL do Power BI) e cadastre em **/admin** no portal.
+6. No portal, vá em **Administração → Power BI**, cole Tenant/Client/Secret,
+   clique em **Testar conexão** e **importe** os relatórios com um clique
+   (sem precisar achar IDs na mão). Depois libere cada relatório por usuário
+   em **Administração → Usuários**.
+
+Rode também a migração da tabela de config:
+[`supabase/config_powerbi.sql`](supabase/config_powerbi.sql).
 
 ## 3. Variáveis de ambiente
 
-Copie `.env.example` para `.env.local` e preencha os valores.
+Copie `.env.example` para `.env.local` e preencha os valores (apenas Supabase).
+
+### Dev local atrás de proxy/antivírus corporativo
+
+Se o Node não validar o certificado TLS do Supabase
+(`UNABLE_TO_VERIFY_LEAF_SIGNATURE`), o script `dev` já usa
+`NODE_OPTIONS=--use-system-ca` para usar o cofre de certificados do Windows.
+Isso afeta só o dev local; na Vercel não é necessário.
 
 ## 4. Rodar
 
