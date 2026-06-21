@@ -1,6 +1,7 @@
-// Marca do portal. Aproximação do logo DriveData (gradiente verde→azul,
-// "D" com setas de avanço). Para usar o logo oficial, coloque o arquivo em
-// public/logo.png e troque este SVG por <img src="/logo.png" .../>.
+// Marca do portal — tile com gradiente verde→azul (identidade DriveData)
+// e um duplo chevron de avanço ("drive"/forward). Limpo e escalável.
+// Para usar o logo OFICIAL: coloque o PNG em public/logo.png e troque o
+// retorno por <img src="/logo.png" width={size} height={size} alt="DriveData" />.
 export default function BrandLogo({
   size = 32,
   className = "",
@@ -16,25 +17,38 @@ export default function BrandLogo({
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
+      role="img"
       aria-label="DriveData"
     >
       <defs>
-        <linearGradient id="ddGrad" x1="15" y1="6" x2="85" y2="94"
-          gradientUnits="userSpaceOnUse">
+        <linearGradient
+          id="ddGrad"
+          x1="10"
+          y1="6"
+          x2="90"
+          y2="94"
+          gradientUnits="userSpaceOnUse"
+        >
           <stop stopColor="#3ddc84" />
-          <stop offset="0.5" stopColor="#14b8d4" />
+          <stop offset="0.5" stopColor="#15b8c9" />
           <stop offset="1" stopColor="#0284c7" />
         </linearGradient>
       </defs>
-      {/* Corpo do "D" */}
+      <rect x="4" y="4" width="92" height="92" rx="24" fill="url(#ddGrad)" />
       <path
-        d="M34 8 H50 A42 42 0 1 1 50 92 H34 Z"
-        fill="url(#ddGrad)"
+        d="M34 30 L54 50 L34 70"
+        stroke="white"
+        strokeWidth="9"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
-      {/* Setas de avanço (espaço negativo) */}
       <path
-        d="M14 26 L40 50 L14 74 V58 L23 50 L14 42 Z"
-        fill="url(#ddGrad)"
+        d="M52 30 L72 50 L52 70"
+        stroke="white"
+        strokeOpacity="0.55"
+        strokeWidth="9"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

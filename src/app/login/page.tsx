@@ -82,7 +82,7 @@ function LoginForm() {
           <button
             type="submit"
             disabled={carregando}
-            className="w-full rounded-lg bg-brand-600 text-white font-medium py-2 hover:bg-brand-700 disabled:opacity-60 transition"
+            className="w-full rounded-lg bg-brand-gradient text-white font-medium py-2.5 hover:opacity-95 disabled:opacity-60 transition shadow-sm"
           >
             {carregando ? "Entrando..." : "Entrar"}
           </button>
