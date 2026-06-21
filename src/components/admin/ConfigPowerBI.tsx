@@ -72,7 +72,7 @@ export default function ConfigPowerBI({
         <button
           type="submit"
           disabled={pending}
-          className="rounded-lg bg-indigo-600 text-white px-4 py-2 text-sm hover:bg-indigo-700 disabled:opacity-60"
+          className="rounded-lg bg-brand-600 text-white px-4 py-2 text-sm hover:bg-brand-700 disabled:opacity-60"
         >
           {pending ? "Salvando..." : "Salvar configuração"}
         </button>

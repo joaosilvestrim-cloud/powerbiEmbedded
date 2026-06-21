@@ -27,7 +27,7 @@ export default function UserMenu({ profile }: { profile: Profile }) {
         onClick={() => setAberto((v) => !v)}
         className="flex items-center gap-2 rounded-lg px-2 py-1.5 hover:bg-slate-100"
       >
-        <div className="h-8 w-8 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-xs font-semibold">
+        <div className="h-8 w-8 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-xs font-semibold">
           {iniciais}
         </div>
         <span className="hidden sm:block text-sm text-slate-700 max-w-[160px] truncate">
@@ -46,7 +46,7 @@ export default function UserMenu({ profile }: { profile: Profile }) {
             <span
               className={`mt-2 inline-block rounded-full px-2 py-0.5 text-xs ${
                 profile.role === "admin"
-                  ? "bg-indigo-100 text-indigo-700"
+                  ? "bg-brand-100 text-brand-700"
                   : "bg-slate-100 text-slate-600"
               }`}
             >

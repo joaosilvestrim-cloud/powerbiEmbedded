@@ -59,14 +59,14 @@ function Passos() {
     "Em “Usuários”, libere cada relatório para quem deve vê-lo.",
   ];
   return (
-    <div className="rounded-2xl border border-indigo-100 bg-indigo-50/50 p-5">
-      <h3 className="text-sm font-semibold text-indigo-800 mb-3">
+    <div className="rounded-2xl border border-brand-100 bg-brand-50/50 p-5">
+      <h3 className="text-sm font-semibold text-brand-800 mb-3">
         Como o embed funciona
       </h3>
       <ol className="space-y-2">
         {itens.map((t, i) => (
           <li key={i} className="flex gap-3 text-sm text-slate-700">
-            <span className="h-5 w-5 shrink-0 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center">
+            <span className="h-5 w-5 shrink-0 rounded-full bg-brand-600 text-white text-xs flex items-center justify-center">
               {i + 1}
             </span>
             {t}

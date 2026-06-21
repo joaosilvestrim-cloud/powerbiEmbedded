@@ -1,6 +1,7 @@
 import Link from "next/link";
 import {
   Users,
+  FolderKanban,
   FileBarChart,
   PlugZap,
   CheckCircle2,
@@ -16,9 +17,10 @@ export default async function AdminOverviewPage() {
   const supabase = await createClient();
   const admin = createAdminClient();
 
-  const [{ count: nUsuarios }, { data: relatorios }, { data: cfg }] =
+  const [{ count: nUsuarios }, { count: nAreas }, { data: relatorios }, { data: cfg }] =
     await Promise.all([
       supabase.from("profiles").select("*", { count: "exact", head: true }),
+      supabase.from("areas").select("*", { count: "exact", head: true }),
       supabase.from("relatorios").select("id, ativo"),
       admin
         .from("config_powerbi")
@@ -35,19 +37,26 @@ export default async function AdminOverviewPage() {
 
   const cards = [
     {
+      label: "Áreas",
+      valor: nAreas ?? 0,
+      icon: FolderKanban,
+      href: "/admin/areas",
+      cor: "bg-brand-50 text-brand-600",
+    },
+    {
+      label: "Painéis",
+      valor: `${ativos}/${totalRel}`,
+      sub: "ativos",
+      icon: FileBarChart,
+      href: "/admin/areas",
+      cor: "bg-violet-50 text-violet-600",
+    },
+    {
       label: "Usuários",
       valor: nUsuarios ?? 0,
       icon: Users,
       href: "/admin/usuarios",
       cor: "bg-blue-50 text-blue-600",
-    },
-    {
-      label: "Relatórios",
-      valor: `${ativos}/${totalRel}`,
-      sub: "ativos",
-      icon: FileBarChart,
-      href: "/admin/relatorios",
-      cor: "bg-violet-50 text-violet-600",
     },
   ];
 
@@ -111,7 +120,7 @@ export default async function AdminOverviewPage() {
           </div>
           <p className="text-sm text-slate-500">Power BI</p>
           {!pbiOk && (
-            <span className="mt-2 inline-flex items-center gap-1 text-sm text-indigo-600">
+            <span className="mt-2 inline-flex items-center gap-1 text-sm text-brand-600">
               Configurar agora <ArrowRight className="h-4 w-4" />
             </span>
           )}
@@ -120,16 +129,16 @@ export default async function AdminOverviewPage() {
 
       <div className="mt-8 grid gap-4 sm:grid-cols-3">
         <QuickLink
-          href="/admin/relatorios"
-          icon={FileBarChart}
-          titulo="Cadastrar relatório"
-          texto="Adicione um relatório do Power BI ao portal."
+          href="/admin/areas"
+          icon={FolderKanban}
+          titulo="Criar área e painéis"
+          texto="Operações, RH, Financeiro… e importe os painéis de cada uma."
         />
         <QuickLink
           href="/admin/usuarios"
           icon={Users}
           titulo="Gerenciar usuários"
-          texto="Crie usuários e libere relatórios para cada um."
+          texto="Crie usuários e libere as áreas que cada um pode ver."
         />
         <QuickLink
           href="/admin/powerbi"
@@ -156,9 +165,9 @@ function QuickLink({
   return (
     <Link
       href={href}
-      className="rounded-2xl border border-slate-200 bg-white p-5 hover:border-indigo-300 hover:shadow-sm transition"
+      className="rounded-2xl border border-slate-200 bg-white p-5 hover:border-brand-300 hover:shadow-sm transition"
     >
-      <Icon className="h-5 w-5 text-indigo-600" />
+      <Icon className="h-5 w-5 text-brand-600" />
       <p className="mt-3 font-medium text-slate-800">{titulo}</p>
       <p className="mt-1 text-sm text-slate-500">{texto}</p>
     </Link>

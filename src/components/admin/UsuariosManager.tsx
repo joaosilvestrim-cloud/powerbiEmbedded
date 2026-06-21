@@ -5,18 +5,19 @@ import { Plus, ShieldCheck, SlidersHorizontal, ChevronDown } from "lucide-react"
 import {
   criarUsuario,
   definirRole,
-  definirPermissao,
+  definirPermissaoArea,
 } from "@/app/admin/actions";
-import type { Profile, Relatorio, Permissao } from "@/lib/types";
+import { cor } from "@/lib/cores";
+import type { Profile, Area, PermissaoArea } from "@/lib/types";
 
 export default function UsuariosManager({
   usuarios,
-  relatorios,
+  areas,
   permissoes,
 }: {
   usuarios: Profile[];
-  relatorios: Relatorio[];
-  permissoes: Permissao[];
+  areas: Area[];
+  permissoes: PermissaoArea[];
 }) {
   const [pending, startTransition] = useTransition();
   const [aberto, setAberto] = useState(false);
@@ -27,7 +28,7 @@ export default function UsuariosManager({
     const m = new Map<string, Set<string>>();
     permissoes.forEach((p) => {
       if (!m.has(p.user_id)) m.set(p.user_id, new Set());
-      m.get(p.user_id)!.add(p.relatorio_id);
+      m.get(p.user_id)!.add(p.area_id);
     });
     return m;
   }, [permissoes]);
@@ -37,7 +38,7 @@ export default function UsuariosManager({
       <div className="flex justify-end">
         <button
           onClick={() => setAberto((v) => !v)}
-          className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 text-white px-4 py-2 text-sm font-medium hover:bg-indigo-700"
+          className="inline-flex items-center gap-2 rounded-lg bg-brand-600 text-white px-4 py-2 text-sm font-medium hover:bg-brand-700"
         >
           <Plus className="h-4 w-4" /> Novo usuário
         </button>
@@ -89,7 +90,7 @@ export default function UsuariosManager({
             <button
               type="submit"
               disabled={pending}
-              className="rounded-lg bg-indigo-600 text-white px-4 py-2 text-sm hover:bg-indigo-700 disabled:opacity-60"
+              className="rounded-lg bg-brand-600 text-white px-4 py-2 text-sm hover:bg-brand-700 disabled:opacity-60"
             >
               Criar usuário
             </button>
@@ -107,8 +108,8 @@ export default function UsuariosManager({
       <div className="rounded-2xl border border-slate-200 bg-white divide-y divide-slate-100">
         {usuarios.map((u) => {
           const isAdmin = u.role === "admin";
-          const liberados = permsPorUser.get(u.id) ?? new Set<string>();
-          const aberto = expandido === u.id;
+          const liberadas = permsPorUser.get(u.id) ?? new Set<string>();
+          const exp = expandido === u.id;
           return (
             <div key={u.id}>
               <div className="flex items-center gap-3 px-4 py-3">
@@ -139,62 +140,65 @@ export default function UsuariosManager({
                 </select>
 
                 {isAdmin ? (
-                  <span className="inline-flex items-center gap-1 text-xs text-indigo-600 w-32 justify-end">
-                    <ShieldCheck className="h-4 w-4" /> vê todos
+                  <span className="inline-flex items-center gap-1 text-xs text-brand-600 w-36 justify-end">
+                    <ShieldCheck className="h-4 w-4" /> vê todas as áreas
                   </span>
                 ) : (
                   <button
-                    onClick={() => setExpandido(aberto ? null : u.id)}
-                    className="inline-flex items-center gap-1 rounded-lg border border-slate-300 px-3 py-1.5 text-xs text-slate-600 hover:bg-slate-50 w-32 justify-center"
+                    onClick={() => setExpandido(exp ? null : u.id)}
+                    className="inline-flex items-center gap-1 rounded-lg border border-slate-300 px-3 py-1.5 text-xs text-slate-600 hover:bg-slate-50 w-36 justify-center"
                   >
                     <SlidersHorizontal className="h-3.5 w-3.5" />
-                    {liberados.size} relatório(s)
+                    {liberadas.size} área(s)
                     <ChevronDown
                       className={`h-3.5 w-3.5 transition ${
-                        aberto ? "rotate-180" : ""
+                        exp ? "rotate-180" : ""
                       }`}
                     />
                   </button>
                 )}
               </div>
 
-              {aberto && !isAdmin && (
+              {exp && !isAdmin && (
                 <div className="bg-slate-50 px-4 py-3 border-t border-slate-100">
                   <p className="text-xs font-medium text-slate-500 mb-2">
-                    Relatórios liberados para {u.nome || u.email}
+                    Áreas liberadas para {u.nome || u.email}
                   </p>
-                  {relatorios.length === 0 ? (
+                  {areas.length === 0 ? (
                     <p className="text-xs text-slate-400">
-                      Cadastre relatórios primeiro.
+                      Crie áreas primeiro.
                     </p>
                   ) : (
                     <div className="grid sm:grid-cols-2 gap-1">
-                      {relatorios.map((r) => (
-                        <label
-                          key={r.id}
-                          className="flex items-center gap-2 rounded-lg px-2 py-1.5 hover:bg-white cursor-pointer"
-                        >
-                          <input
-                            type="checkbox"
-                            checked={liberados.has(r.id)}
-                            disabled={pending}
-                            onChange={(e) =>
-                              startTransition(() =>
-                                definirPermissao(u.id, r.id, e.target.checked)
-                              )
-                            }
-                            className="h-4 w-4 rounded border-slate-300 text-indigo-600"
-                          />
-                          <span className="text-sm text-slate-700">
-                            {r.nome}
-                          </span>
-                          {!r.ativo && (
-                            <span className="text-xs text-slate-400">
-                              (inativo)
+                      {areas.map((a) => {
+                        const c = cor(a.cor);
+                        return (
+                          <label
+                            key={a.id}
+                            className="flex items-center gap-2 rounded-lg px-2 py-1.5 hover:bg-white cursor-pointer"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={liberadas.has(a.id)}
+                              disabled={pending}
+                              onChange={(e) =>
+                                startTransition(() =>
+                                  definirPermissaoArea(
+                                    u.id,
+                                    a.id,
+                                    e.target.checked
+                                  )
+                                )
+                              }
+                              className="h-4 w-4 rounded border-slate-300 text-brand-600"
+                            />
+                            <span className={`h-2.5 w-2.5 rounded-full ${c.dot}`} />
+                            <span className="text-sm text-slate-700">
+                              {a.nome}
                             </span>
-                          )}
-                        </label>
-                      ))}
+                          </label>
+                        );
+                      })}
                     </div>
                   )}
                 </div>

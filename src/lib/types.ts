@@ -8,20 +8,29 @@ export interface Profile {
   criado_em: string;
 }
 
+export interface Area {
+  id: string;
+  nome: string;
+  descricao: string;
+  cor: string;
+  criado_em: string;
+}
+
 export interface Relatorio {
   id: string;
   nome: string;
   descricao: string;
   pbi_workspace_id: string;
   pbi_report_id: string;
+  area_id: string | null;
   ativo: boolean;
   criado_em: string;
 }
 
-export interface Permissao {
+export interface PermissaoArea {
   id: string;
   user_id: string;
-  relatorio_id: string;
+  area_id: string;
   criado_em: string;
 }
 

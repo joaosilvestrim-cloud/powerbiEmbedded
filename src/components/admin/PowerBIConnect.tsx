@@ -9,7 +9,7 @@ import {
   Check,
   Loader2,
 } from "lucide-react";
-import { importarRelatorio } from "@/app/admin/actions";
+import { importarPainel } from "@/app/admin/actions";
 
 interface Workspace {
   id: string;
@@ -20,10 +20,14 @@ interface Report {
   name: string;
 }
 
+// Se `areaId` for informado, mostra botões para importar cada relatório
+// como painel daquela área. Sem `areaId`, funciona só como teste de conexão.
 export default function PowerBIConnect({
   configurado,
+  areaId,
 }: {
   configurado: boolean;
+  areaId?: string;
 }) {
   const [testando, setTestando] = useState(false);
   const [status, setStatus] = useState<"idle" | "ok" | "erro">("idle");
@@ -79,8 +83,9 @@ export default function PowerBIConnect({
   }
 
   function importar(r: Report) {
+    if (!areaId) return;
     startTransition(async () => {
-      await importarRelatorio(r.name, wsId, r.id);
+      await importarPainel(areaId, r.name, wsId, r.id);
       setImportados((s) => new Set(s).add(r.id));
     });
   }
@@ -97,12 +102,12 @@ export default function PowerBIConnect({
         ) : (
           <PlugZap className="h-4 w-4" />
         )}
-        Testar conexão
+        {areaId ? "Buscar relatórios no Power BI" : "Testar conexão"}
       </button>
 
       {!configurado && (
         <p className="text-xs text-slate-400">
-          Preencha e salve as credenciais ao lado para habilitar o teste.
+          Configure as credenciais em Administração → Power BI para habilitar.
         </p>
       )}
 
@@ -165,25 +170,31 @@ export default function PowerBIConnect({
                     <span className="text-sm text-slate-700 truncate">
                       {r.name}
                     </span>
-                    <button
-                      onClick={() => importar(r)}
-                      disabled={pending || done}
-                      className={`inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-medium ${
-                        done
-                          ? "bg-green-100 text-green-700"
-                          : "bg-indigo-600 text-white hover:bg-indigo-700"
-                      } disabled:opacity-70`}
-                    >
-                      {done ? (
-                        <>
-                          <Check className="h-3.5 w-3.5" /> importado
-                        </>
-                      ) : (
-                        <>
-                          <Download className="h-3.5 w-3.5" /> importar
-                        </>
-                      )}
-                    </button>
+                    {areaId ? (
+                      <button
+                        onClick={() => importar(r)}
+                        disabled={pending || done}
+                        className={`inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-medium ${
+                          done
+                            ? "bg-green-100 text-green-700"
+                            : "bg-brand-600 text-white hover:bg-brand-700"
+                        } disabled:opacity-70`}
+                      >
+                        {done ? (
+                          <>
+                            <Check className="h-3.5 w-3.5" /> importado
+                          </>
+                        ) : (
+                          <>
+                            <Download className="h-3.5 w-3.5" /> importar
+                          </>
+                        )}
+                      </button>
+                    ) : (
+                      <span className="text-xs text-slate-400 font-mono">
+                        {r.id.slice(0, 8)}…
+                      </span>
+                    )}
                   </li>
                 );
               })}

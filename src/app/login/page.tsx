@@ -3,6 +3,7 @@
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import BrandLogo from "@/components/BrandLogo";
 
 function LoginForm() {
   const router = useRouter();
@@ -38,9 +39,12 @@ function LoginForm() {
     <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">
       <div className="w-full max-w-sm bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
         <div className="mb-6 text-center">
-          <h1 className="text-2xl font-semibold text-slate-800">Portal BI</h1>
+          <BrandLogo size={48} className="mx-auto" />
+          <h1 className="mt-3 text-2xl font-semibold text-slate-800">
+            Portal BI
+          </h1>
           <p className="text-sm text-slate-500 mt-1">
-            Entre para acessar seus relatórios
+            Entre para acessar seus painéis
           </p>
         </div>
 
@@ -54,7 +58,7 @@ function LoginForm() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-500"
               placeholder="voce@empresa.com"
             />
           </div>
@@ -68,7 +72,7 @@ function LoginForm() {
               required
               value={senha}
               onChange={(e) => setSenha(e.target.value)}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-500"
               placeholder="••••••••"
             />
           </div>
@@ -78,7 +82,7 @@ function LoginForm() {
           <button
             type="submit"
             disabled={carregando}
-            className="w-full rounded-lg bg-indigo-600 text-white font-medium py-2 hover:bg-indigo-700 disabled:opacity-60 transition"
+            className="w-full rounded-lg bg-brand-600 text-white font-medium py-2 hover:bg-brand-700 disabled:opacity-60 transition"
           >
             {carregando ? "Entrando..." : "Entrar"}
           </button>
