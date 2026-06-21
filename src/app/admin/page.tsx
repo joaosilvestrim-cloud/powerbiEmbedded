@@ -1,9 +1,10 @@
 import { requireAdmin } from "@/lib/auth";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createAdminClient } from "@/lib/supabase/server";
 import Nav from "@/components/Nav";
 import RelatoriosAdmin from "@/components/admin/RelatoriosAdmin";
 import UsuariosAdmin from "@/components/admin/UsuariosAdmin";
 import PermissoesAdmin from "@/components/admin/PermissoesAdmin";
+import ConfigPowerBI from "@/components/admin/ConfigPowerBI";
 import type { Profile, Relatorio, Permissao } from "@/lib/types";
 
 export default async function AdminPage() {
@@ -16,6 +17,14 @@ export default async function AdminPage() {
       supabase.from("profiles").select("*").order("nome"),
       supabase.from("permissoes").select("*"),
     ]);
+
+  // Config Power BI lida via service role (RLS bloqueia o navegador).
+  // Não enviamos o secret ao cliente — só se ele já existe.
+  const { data: cfg } = await createAdminClient()
+    .from("config_powerbi")
+    .select("tenant_id, client_id, client_secret")
+    .eq("id", true)
+    .single();
 
   return (
     <>
@@ -43,6 +52,17 @@ export default async function AdminPage() {
             usuarios={(usuarios ?? []) as Profile[]}
             relatorios={(relatorios ?? []) as Relatorio[]}
             permissoes={(permissoes ?? []) as Permissao[]}
+          />
+        </section>
+
+        <section>
+          <h2 className="text-lg font-semibold text-slate-800 mb-4">
+            Power BI
+          </h2>
+          <ConfigPowerBI
+            tenantId={cfg?.tenant_id ?? ""}
+            clientId={cfg?.client_id ?? ""}
+            secretDefinido={Boolean(cfg?.client_secret)}
           />
         </section>
       </main>

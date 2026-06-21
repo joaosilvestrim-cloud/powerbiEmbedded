@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { generateEmbed } from "@/lib/powerbi";
 
 // POST /api/embed-token  { relatorioId }
@@ -44,8 +44,25 @@ export async function POST(request: Request) {
     );
   }
 
+  // Credenciais do service principal — lidas via service role (servidor),
+  // nunca expostas ao navegador.
+  const admin = createAdminClient();
+  const { data: cred } = await admin
+    .from("config_powerbi")
+    .select("tenant_id, client_id, client_secret")
+    .eq("id", true)
+    .single();
+
+  if (!cred || !cred.tenant_id || !cred.client_id || !cred.client_secret) {
+    return NextResponse.json(
+      { error: "Power BI ainda não configurado. Vá em Administração → Power BI." },
+      { status: 503 }
+    );
+  }
+
   try {
     const embed = await generateEmbed(
+      cred,
       relatorio.pbi_workspace_id,
       relatorio.pbi_report_id
     );

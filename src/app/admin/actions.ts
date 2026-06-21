@@ -71,6 +71,29 @@ export async function definirRole(userId: string, role: "admin" | "user") {
   revalidatePath("/admin");
 }
 
+// ---------- Configuração Power BI ----------
+// Salva as credenciais do service principal na tabela protegida.
+// O client_secret só é atualizado se um novo valor for enviado
+// (deixar em branco mantém o atual).
+export async function salvarConfigPowerBI(formData: FormData) {
+  await assertAdmin();
+  const admin = createAdminClient();
+
+  const tenant_id = String(formData.get("tenant_id") || "").trim();
+  const client_id = String(formData.get("client_id") || "").trim();
+  const client_secret = String(formData.get("client_secret") || "").trim();
+
+  const update: Record<string, string> = {
+    tenant_id,
+    client_id,
+    atualizado_em: new Date().toISOString(),
+  };
+  if (client_secret) update.client_secret = client_secret;
+
+  await admin.from("config_powerbi").update(update).eq("id", true);
+  revalidatePath("/admin");
+}
+
 // Cria um usuário com senha temporária (precisa da service role key).
 export async function criarUsuario(formData: FormData) {
   await assertAdmin();

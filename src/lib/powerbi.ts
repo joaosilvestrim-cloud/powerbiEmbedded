@@ -5,17 +5,23 @@ const AUTHORITY = "https://login.microsoftonline.com";
 const PBI_API = "https://api.powerbi.com/v1.0/myorg";
 const SCOPE = "https://analysis.windows.net/powerbi/api/.default";
 
+// Credenciais do service principal — vêm da tabela config_powerbi.
+export interface PbiCredenciais {
+  tenant_id: string;
+  client_id: string;
+  client_secret: string;
+}
+
 // Passo 1 — obtém um token AAD via client credentials (service principal).
-async function getAadToken(): Promise<string> {
-  const tenant = process.env.PBI_TENANT_ID!;
+async function getAadToken(cred: PbiCredenciais): Promise<string> {
   const body = new URLSearchParams({
     grant_type: "client_credentials",
-    client_id: process.env.PBI_CLIENT_ID!,
-    client_secret: process.env.PBI_CLIENT_SECRET!,
+    client_id: cred.client_id,
+    client_secret: cred.client_secret,
     scope: SCOPE,
   });
 
-  const res = await fetch(`${AUTHORITY}/${tenant}/oauth2/v2.0/token`, {
+  const res = await fetch(`${AUTHORITY}/${cred.tenant_id}/oauth2/v2.0/token`, {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body,
@@ -65,10 +71,11 @@ export interface PowerBiEmbed {
 
 // Passo 3 — gera o embed token (accessLevel View) para o relatório.
 export async function generateEmbed(
+  cred: PbiCredenciais,
   workspaceId: string,
   reportId: string
 ): Promise<PowerBiEmbed> {
-  const aadToken = await getAadToken();
+  const aadToken = await getAadToken(cred);
   const info = await getReportInfo(aadToken, workspaceId, reportId);
 
   const res = await fetch(
