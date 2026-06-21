@@ -35,13 +35,21 @@ function LinkItem({ item, active }: { item: Item; active: boolean }) {
   return (
     <Link
       href={item.href}
-      className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition ${
+      className={`group relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium press ${
         active
           ? "bg-brand-50 text-brand-700"
           : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
       }`}
     >
-      <Icon className="h-[18px] w-[18px]" strokeWidth={2} />
+      <span
+        className={`absolute left-0 top-1/2 -translate-y-1/2 w-1 rounded-r-full bg-brand-600 transition-all duration-300 ${
+          active ? "h-5 opacity-100" : "h-0 opacity-0"
+        }`}
+      />
+      <Icon
+        className="h-[18px] w-[18px] transition-transform group-hover:scale-110"
+        strokeWidth={2}
+      />
       {item.label}
     </Link>
   );

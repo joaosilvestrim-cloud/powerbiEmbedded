@@ -36,7 +36,9 @@ export default function AppShell({
           </div>
         </header>
 
-        <main className="flex-1 p-4 sm:p-6 min-w-0">{children}</main>
+        <main key={title} className="flex-1 p-4 sm:p-6 min-w-0 animate-fade-up">
+          {children}
+        </main>
       </div>
     </div>
   );

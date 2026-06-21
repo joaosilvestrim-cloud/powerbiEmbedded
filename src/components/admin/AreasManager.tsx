@@ -23,7 +23,7 @@ export default function AreasManager({
       <div className="flex justify-end">
         <button
           onClick={() => setAberto((v) => !v)}
-          className="inline-flex items-center gap-2 rounded-lg bg-brand-600 text-white px-4 py-2 text-sm font-medium hover:bg-brand-700"
+          className="inline-flex items-center gap-2 rounded-lg bg-brand-600 text-white px-4 py-2 text-sm font-medium hover:bg-brand-700 press"
         >
           <Plus className="h-4 w-4" /> Nova área
         </button>
@@ -39,7 +39,7 @@ export default function AreasManager({
               setCorSel("brand");
             });
           }}
-          className="rounded-2xl border border-slate-200 bg-white p-5 space-y-4"
+          className="rounded-2xl border border-slate-200 bg-white p-5 space-y-4 animate-slide-down overflow-hidden"
         >
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="text-sm">
@@ -107,13 +107,13 @@ export default function AreasManager({
           “Financeiro”.
         </div>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 stagger">
           {areas.map((a) => {
             const c = cor(a.cor);
             return (
               <div
                 key={a.id}
-                className="rounded-2xl border border-slate-200 bg-white p-5 flex flex-col"
+                className="rounded-2xl border border-slate-200 bg-white p-5 flex flex-col hover:shadow-lg hover:border-brand-300 card-lift"
               >
                 <div className="flex items-start justify-between">
                   <div

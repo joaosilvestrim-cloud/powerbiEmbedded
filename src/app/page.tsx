@@ -49,14 +49,14 @@ export default async function HomePage() {
           )}
         </div>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 stagger">
           {lista.map((a) => {
             const c = cor(a.cor);
             return (
               <Link
                 key={a.id}
                 href={`/area/${a.id}`}
-                className="group flex flex-col rounded-2xl border border-slate-200 bg-white p-5 hover:border-brand-400 hover:shadow-md transition"
+                className="group flex flex-col rounded-2xl border border-slate-200 bg-white p-5 hover:border-brand-400 hover:shadow-lg card-lift press"
               >
                 <div
                   className={`h-11 w-11 rounded-xl flex items-center justify-center ${c.bg} ${c.text}`}

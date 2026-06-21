@@ -38,7 +38,7 @@ export default function UsuariosManager({
       <div className="flex justify-end">
         <button
           onClick={() => setAberto((v) => !v)}
-          className="inline-flex items-center gap-2 rounded-lg bg-brand-600 text-white px-4 py-2 text-sm font-medium hover:bg-brand-700"
+          className="inline-flex items-center gap-2 rounded-lg bg-brand-600 text-white px-4 py-2 text-sm font-medium hover:bg-brand-700 press"
         >
           <Plus className="h-4 w-4" /> Novo usuário
         </button>
@@ -57,7 +57,7 @@ export default function UsuariosManager({
               }
             });
           }}
-          className="rounded-2xl border border-slate-200 bg-white p-5 grid gap-4 sm:grid-cols-3"
+          className="rounded-2xl border border-slate-200 bg-white p-5 grid gap-4 sm:grid-cols-3 animate-slide-down overflow-hidden"
         >
           <label className="text-sm">
             <span className="block text-slate-700 mb-1">Nome</span>
@@ -160,7 +160,7 @@ export default function UsuariosManager({
               </div>
 
               {exp && !isAdmin && (
-                <div className="bg-slate-50 px-4 py-3 border-t border-slate-100">
+                <div className="bg-slate-50 px-4 py-3 border-t border-slate-100 animate-slide-down overflow-hidden">
                   <p className="text-xs font-medium text-slate-500 mb-2">
                     Áreas liberadas para {u.nome || u.email}
                   </p>

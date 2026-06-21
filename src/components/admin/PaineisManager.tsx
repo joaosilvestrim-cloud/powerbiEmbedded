@@ -74,7 +74,7 @@ export default function PaineisManager({
               setAberto(false);
             });
           }}
-          className="rounded-2xl border border-slate-200 bg-white p-5 space-y-3"
+          className="rounded-2xl border border-slate-200 bg-white p-5 space-y-3 animate-slide-down overflow-hidden"
         >
           <div className="grid gap-3 sm:grid-cols-2">
             <input

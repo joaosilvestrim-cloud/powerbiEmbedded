@@ -36,3 +36,71 @@
 body {
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
+
+/* ============================================================
+   Animações
+   ============================================================ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.96) translateY(-4px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-6px); max-height: 0; }
+  to   { opacity: 1; transform: translateY(0); max-height: 1200px; }
+}
+@keyframes shimmer {
+  0% { background-position: -480px 0; }
+  100% { background-position: 480px 0; }
+}
+
+.animate-fade-up { animation: fadeUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.animate-fade-in { animation: fadeIn 0.35s ease both; }
+.animate-scale-in { animation: scaleIn 0.16s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.animate-slide-down { animation: slideDown 0.28s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+/* Entrada escalonada de grades de cards */
+.stagger > * { animation: fadeUp 0.45s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.stagger > *:nth-child(1) { animation-delay: 0.02s; }
+.stagger > *:nth-child(2) { animation-delay: 0.06s; }
+.stagger > *:nth-child(3) { animation-delay: 0.10s; }
+.stagger > *:nth-child(4) { animation-delay: 0.14s; }
+.stagger > *:nth-child(5) { animation-delay: 0.18s; }
+.stagger > *:nth-child(6) { animation-delay: 0.22s; }
+.stagger > *:nth-child(7) { animation-delay: 0.26s; }
+.stagger > *:nth-child(8) { animation-delay: 0.30s; }
+.stagger > *:nth-child(9) { animation-delay: 0.34s; }
+
+/* Card com leve elevação ao passar o mouse */
+.card-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  will-change: transform;
+}
+.card-lift:hover { transform: translateY(-3px); }
+
+/* Micro-interação de clique em botões interativos */
+button:not(:disabled),
+a[href] {
+  transition: transform 0.12s ease, background-color 0.15s ease,
+    color 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease;
+}
+.press:active { transform: scale(0.97); }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  .animate-fade-up,
+  .animate-fade-in,
+  .animate-scale-in,
+  .animate-slide-down,
+  .stagger > * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

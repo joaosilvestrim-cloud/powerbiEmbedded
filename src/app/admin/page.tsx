@@ -66,14 +66,14 @@ export default async function AdminOverviewPage() {
       title="Visão geral"
       subtitle="Resumo do portal"
     >
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 stagger">
         {cards.map((c) => {
           const Icon = c.icon;
           return (
             <Link
               key={c.label}
               href={c.href}
-              className="rounded-2xl border border-slate-200 bg-white p-5 hover:shadow-md transition"
+              className="rounded-2xl border border-slate-200 bg-white p-5 hover:shadow-lg card-lift press"
             >
               <div
                 className={`h-10 w-10 rounded-xl flex items-center justify-center ${c.cor}`}
@@ -96,7 +96,7 @@ export default async function AdminOverviewPage() {
         {/* Status Power BI */}
         <Link
           href="/admin/powerbi"
-          className="rounded-2xl border border-slate-200 bg-white p-5 hover:shadow-md transition"
+          className="rounded-2xl border border-slate-200 bg-white p-5 hover:shadow-lg card-lift press"
         >
           <div className="h-10 w-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
             <PlugZap className="h-5 w-5" />
@@ -127,7 +127,7 @@ export default async function AdminOverviewPage() {
         </Link>
       </div>
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-3">
+      <div className="mt-8 grid gap-4 sm:grid-cols-3 stagger">
         <QuickLink
           href="/admin/areas"
           icon={FolderKanban}
@@ -165,7 +165,7 @@ function QuickLink({
   return (
     <Link
       href={href}
-      className="rounded-2xl border border-slate-200 bg-white p-5 hover:border-brand-300 hover:shadow-sm transition"
+      className="rounded-2xl border border-slate-200 bg-white p-5 hover:border-brand-300 hover:shadow-md card-lift press"
     >
       <Icon className="h-5 w-5 text-brand-600" />
       <p className="mt-3 font-medium text-slate-800">{titulo}</p>
