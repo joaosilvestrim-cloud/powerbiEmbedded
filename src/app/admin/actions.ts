@@ -121,6 +121,22 @@ export async function importarPainel(
   return { jaExiste: false };
 }
 
+export async function atualizarPainel(
+  id: string,
+  areaId: string,
+  formData: FormData
+) {
+  const supabase = await assertAdmin();
+  await supabase
+    .from("relatorios")
+    .update({
+      nome: String(formData.get("nome") || "").trim(),
+      descricao: String(formData.get("descricao") || "").trim(),
+    })
+    .eq("id", id);
+  revalidatePath(`/admin/areas/${areaId}`);
+}
+
 export async function togglePainel(id: string, areaId: string, ativo: boolean) {
   const supabase = await assertAdmin();
   await supabase.from("relatorios").update({ ativo }).eq("id", id);

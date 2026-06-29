@@ -8,6 +8,7 @@ import {
   definirPermissaoArea,
 } from "@/app/admin/actions";
 import { cor } from "@/lib/cores";
+import { useToast } from "@/components/Toast";
 import type { Profile, Area, PermissaoArea } from "@/lib/types";
 
 export default function UsuariosManager({
@@ -19,6 +20,7 @@ export default function UsuariosManager({
   areas: Area[];
   permissoes: PermissaoArea[];
 }) {
+  const toast = useToast();
   const [pending, startTransition] = useTransition();
   const [aberto, setAberto] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
@@ -52,6 +54,7 @@ export default function UsuariosManager({
               try {
                 await criarUsuario(fd);
                 setAberto(false);
+                toast("Usuário criado");
               } catch (e) {
                 setErro(e instanceof Error ? e.message : "Erro ao criar usuário");
               }
@@ -129,9 +132,13 @@ export default function UsuariosManager({
                   defaultValue={u.role}
                   disabled={pending}
                   onChange={(e) =>
-                    startTransition(() =>
-                      definirRole(u.id, e.target.value as "admin" | "user")
-                    )
+                    startTransition(async () => {
+                      await definirRole(
+                        u.id,
+                        e.target.value as "admin" | "user"
+                      );
+                      toast("Papel atualizado");
+                    })
                   }
                   className="rounded-lg border border-slate-300 px-2 py-1 text-sm"
                 >
@@ -182,13 +189,18 @@ export default function UsuariosManager({
                               checked={liberadas.has(a.id)}
                               disabled={pending}
                               onChange={(e) =>
-                                startTransition(() =>
-                                  definirPermissaoArea(
+                                startTransition(async () => {
+                                  await definirPermissaoArea(
                                     u.id,
                                     a.id,
                                     e.target.checked
-                                  )
-                                )
+                                  );
+                                  toast(
+                                    e.target.checked
+                                      ? "Área liberada"
+                                      : "Acesso removido"
+                                  );
+                                })
                               }
                               className="h-4 w-4 rounded border-slate-300 text-brand-600"
                             />

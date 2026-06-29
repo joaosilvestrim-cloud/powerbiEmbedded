@@ -36,8 +36,11 @@ function LoginForm() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">
-      <div className="w-full max-w-sm bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+    <div className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden bg-gradient-to-br from-slate-50 via-white to-brand-50">
+      {/* brilhos decorativos da marca */}
+      <div className="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-full bg-accent-400/20 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-24 -right-24 h-80 w-80 rounded-full bg-brand-400/20 blur-3xl" />
+      <div className="relative w-full max-w-sm bg-white/90 backdrop-blur rounded-2xl shadow-xl border border-white/60 p-8 animate-fade-up">
         <div className="mb-6 text-center">
           <BrandLogo size={48} className="mx-auto" />
           <h1 className="mt-3 text-2xl font-semibold text-slate-800">

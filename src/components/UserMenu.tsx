@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { LogOut, ChevronDown } from "lucide-react";
+import Link from "next/link";
+import { LogOut, ChevronDown, UserCog } from "lucide-react";
 import type { Profile } from "@/lib/types";
 
 export default function UserMenu({ profile }: { profile: Profile }) {
@@ -54,6 +55,14 @@ export default function UserMenu({ profile }: { profile: Profile }) {
             </span>
           </div>
           <div className="my-1 border-t border-slate-100" />
+          <Link
+            href="/conta"
+            onClick={() => setAberto(false)}
+            className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-100"
+          >
+            <UserCog className="h-4 w-4" />
+            Minha conta
+          </Link>
           <form action="/auth/signout" method="post">
             <button
               type="submit"
