@@ -22,6 +22,7 @@ export interface Relatorio {
   descricao: string;
   pbi_workspace_id: string;
   pbi_report_id: string;
+  embed_url: string | null;
   area_id: string | null;
   ativo: boolean;
   criado_em: string;

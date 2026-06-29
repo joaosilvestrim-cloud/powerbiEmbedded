@@ -54,6 +54,35 @@ export async function removerArea(id: string) {
 // ============================================================
 // Painéis (relatórios) — sempre dentro de uma área
 // ============================================================
+// Extrai a URL do que o usuário colar: aceita o link cru (https://…)
+// ou o código <iframe ... src="…"> inteiro.
+function extrairEmbedUrl(bruto: string): string {
+  const txt = bruto.trim();
+  const m = txt.match(/src\s*=\s*["']([^"']+)["']/i);
+  const url = (m ? m[1] : txt).trim();
+  return url;
+}
+
+// Cria um painel por LINK de incorporação (iframe / Publicar na web).
+export async function criarPainelLink(areaId: string, formData: FormData) {
+  const supabase = await assertAdmin();
+  const bruto = String(formData.get("embed") || "");
+  const embed_url = extrairEmbedUrl(bruto);
+  if (!/^https:\/\/app\.powerbi\.com\//i.test(embed_url)) {
+    throw new Error(
+      "Link inválido. Cole o link 'Publicar na web' ou o código <iframe> do Power BI."
+    );
+  }
+  await supabase.from("relatorios").insert({
+    area_id: areaId,
+    nome: String(formData.get("nome") || "").trim(),
+    descricao: String(formData.get("descricao") || "").trim(),
+    embed_url,
+  });
+  revalidatePath(`/admin/areas/${areaId}`);
+}
+
+// Cria um painel pelo modo "App Owns Data" (service principal / IDs).
 export async function criarPainel(areaId: string, formData: FormData) {
   const supabase = await assertAdmin();
   await supabase.from("relatorios").insert({

@@ -64,11 +64,12 @@ export default async function AreaDetalhePage({
 
         <div>
           <h3 className="text-sm font-semibold text-slate-700 mb-2">
-            Importar do Power BI
+            Avançado — importar via service principal
           </h3>
           <p className="text-xs text-slate-500 mb-2">
-            Busque os relatórios do seu workspace e adicione como painéis desta
-            área com um clique.
+            Opcional. Só para o modo “App Owns Data” (com Azure configurado em
+            Power BI). Para a maioria dos casos, use o link de incorporação ao
+            lado.
           </p>
           <PowerBIConnect configurado={configurado} areaId={id} />
         </div>

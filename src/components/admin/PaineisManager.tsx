@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Plus, Trash2, Info } from "lucide-react";
+import { Plus, Trash2, Info, Link2 } from "lucide-react";
 import {
-  criarPainel,
+  criarPainelLink,
   togglePainel,
   removerPainel,
 } from "@/app/admin/actions";
@@ -18,14 +18,15 @@ export default function PaineisManager({
 }) {
   const [pending, startTransition] = useTransition();
   const [aberto, setAberto] = useState(false);
+  const [erro, setErro] = useState<string | null>(null);
 
   return (
     <div className="space-y-4">
       <div className="rounded-2xl border border-slate-200 bg-white divide-y divide-slate-100">
         {paineis.length === 0 && (
           <p className="px-4 py-8 text-center text-slate-400 text-sm">
-            Nenhum painel nesta área ainda. Importe do Power BI ao lado ou
-            adicione manualmente.
+            Nenhum painel nesta área ainda. Cole um link de incorporação
+            abaixo.
           </p>
         )}
         {paineis.map((p) => (
@@ -34,8 +35,16 @@ export default function PaineisManager({
               <div className="font-medium text-slate-800 truncate">
                 {p.nome}
               </div>
-              <div className="text-xs text-slate-400 font-mono truncate">
-                {p.pbi_report_id.slice(0, 12)}…
+              <div className="text-xs text-slate-400 truncate">
+                {p.embed_url ? (
+                  <span className="inline-flex items-center gap-1">
+                    <Link2 className="h-3 w-3" /> link de incorporação
+                  </span>
+                ) : (
+                  <span className="font-mono">
+                    {p.pbi_report_id?.slice(0, 12)}…
+                  </span>
+                )}
               </div>
             </div>
             <button
@@ -43,7 +52,7 @@ export default function PaineisManager({
               onClick={() =>
                 startTransition(() => togglePainel(p.id, areaId, !p.ativo))
               }
-              className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${
+              className={`rounded-full px-2.5 py-0.5 text-xs font-medium press ${
                 p.ativo
                   ? "bg-green-100 text-green-700"
                   : "bg-slate-100 text-slate-500"
@@ -69,9 +78,14 @@ export default function PaineisManager({
       {aberto ? (
         <form
           action={(fd) => {
+            setErro(null);
             startTransition(async () => {
-              await criarPainel(areaId, fd);
-              setAberto(false);
+              try {
+                await criarPainelLink(areaId, fd);
+                setAberto(false);
+              } catch (e) {
+                setErro(e instanceof Error ? e.message : "Erro ao salvar");
+              }
             });
           }}
           className="rounded-2xl border border-slate-200 bg-white p-5 space-y-3 animate-slide-down overflow-hidden"
@@ -80,7 +94,7 @@ export default function PaineisManager({
             <input
               name="nome"
               required
-              placeholder="Nome do painel"
+              placeholder="Nome do painel (ex.: 3D Porto)"
               className="rounded-lg border border-slate-300 px-3 py-2 text-sm"
             />
             <input
@@ -88,39 +102,37 @@ export default function PaineisManager({
               placeholder="Descrição (opcional)"
               className="rounded-lg border border-slate-300 px-3 py-2 text-sm"
             />
-            <input
-              name="workspace_id"
-              required
-              placeholder="Workspace (group) ID"
-              className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-mono"
-            />
-            <input
-              name="report_id"
-              required
-              placeholder="Report ID"
-              className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-mono"
-            />
           </div>
+          <textarea
+            name="embed"
+            required
+            rows={3}
+            placeholder='Cole aqui o link "Publicar na web" (https://app.powerbi.com/view?r=…) ou o código <iframe …> inteiro'
+            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm font-mono"
+          />
           <div className="flex gap-3 items-start rounded-lg bg-slate-50 border border-slate-200 p-3 text-xs text-slate-600">
             <Info className="h-4 w-4 shrink-0 mt-0.5 text-slate-400" />
             <span>
-              Os IDs estão na URL do relatório:{" "}
-              <code className="font-mono">
-                app.powerbi.com/groups/<b>WORKSPACE</b>/reports/<b>REPORT</b>
-              </code>
+              No Power BI: <b>Arquivo → Incorporar relatório → Publicar na
+              web (público)</b>. Copie o link ou o código <code>&lt;iframe&gt;</code>{" "}
+              e cole acima — o portal extrai a URL automaticamente.
             </span>
           </div>
+          {erro && <p className="text-sm text-red-600">{erro}</p>}
           <div className="flex gap-2">
             <button
               type="submit"
               disabled={pending}
-              className="rounded-lg bg-brand-600 text-white px-4 py-2 text-sm hover:bg-brand-700 disabled:opacity-60"
+              className="rounded-lg bg-brand-600 text-white px-4 py-2 text-sm hover:bg-brand-700 disabled:opacity-60 press"
             >
               Adicionar painel
             </button>
             <button
               type="button"
-              onClick={() => setAberto(false)}
+              onClick={() => {
+                setAberto(false);
+                setErro(null);
+              }}
               className="rounded-lg border border-slate-300 px-4 py-2 text-sm"
             >
               Cancelar
@@ -130,9 +142,9 @@ export default function PaineisManager({
       ) : (
         <button
           onClick={() => setAberto(true)}
-          className="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-4 py-2 text-sm text-slate-600 hover:bg-slate-50"
+          className="inline-flex items-center gap-2 rounded-lg bg-brand-600 text-white px-4 py-2 text-sm font-medium hover:bg-brand-700 press"
         >
-          <Plus className="h-4 w-4" /> Adicionar painel manualmente
+          <Plus className="h-4 w-4" /> Adicionar painel por link
         </button>
       )}
     </div>

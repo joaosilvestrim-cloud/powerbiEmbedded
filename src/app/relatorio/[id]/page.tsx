@@ -5,6 +5,7 @@ import { getProfile } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import AppShell from "@/components/AppShell";
 import ReportViewer from "@/components/ReportViewer";
+import IframeViewer from "@/components/IframeViewer";
 import type { Relatorio } from "@/lib/types";
 
 export default async function RelatorioPage({
@@ -41,7 +42,11 @@ export default async function RelatorioPage({
         </Link>
       }
     >
-      <ReportViewer relatorioId={relatorio.id} />
+      {relatorio.embed_url ? (
+        <IframeViewer embedUrl={relatorio.embed_url} titulo={relatorio.nome} />
+      ) : (
+        <ReportViewer relatorioId={relatorio.id} />
+      )}
     </AppShell>
   );
 }
