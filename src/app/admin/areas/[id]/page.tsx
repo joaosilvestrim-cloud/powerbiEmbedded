@@ -41,11 +41,14 @@ export default async function AreaDetalhePage({
     <AppShell
       profile={profile}
       title={(area as Area).nome}
-      subtitle={(area as Area).descricao || "Painéis desta área"}
+      breadcrumb={[
+        { label: "Áreas", href: "/admin/areas" },
+        { label: (area as Area).nome },
+      ]}
       actions={
         <Link
           href="/admin/areas"
-          className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 px-3 py-1.5 text-sm text-slate-600 hover:bg-slate-50"
+          className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 px-3 py-1.5 text-sm text-slate-600 hover:bg-slate-50 press"
         >
           <ArrowLeft className="h-4 w-4" /> Áreas
         </Link>

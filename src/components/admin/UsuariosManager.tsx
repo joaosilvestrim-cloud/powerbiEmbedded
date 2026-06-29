@@ -9,6 +9,7 @@ import {
 } from "@/app/admin/actions";
 import { cor } from "@/lib/cores";
 import { useToast } from "@/components/Toast";
+import SearchInput from "@/components/SearchInput";
 import type { Profile, Area, PermissaoArea } from "@/lib/types";
 
 export default function UsuariosManager({
@@ -25,6 +26,16 @@ export default function UsuariosManager({
   const [aberto, setAberto] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
   const [expandido, setExpandido] = useState<string | null>(null);
+  const [q, setQ] = useState("");
+
+  const termo = q.trim().toLowerCase();
+  const filtrados = termo
+    ? usuarios.filter(
+        (u) =>
+          (u.nome || "").toLowerCase().includes(termo) ||
+          u.email.toLowerCase().includes(termo)
+      )
+    : usuarios;
 
   const permsPorUser = useMemo(() => {
     const m = new Map<string, Set<string>>();
@@ -37,10 +48,15 @@ export default function UsuariosManager({
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-end">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <SearchInput
+          value={q}
+          onChange={setQ}
+          placeholder="Buscar por nome ou e-mail…"
+        />
         <button
           onClick={() => setAberto((v) => !v)}
-          className="inline-flex items-center gap-2 rounded-lg bg-brand-600 text-white px-4 py-2 text-sm font-medium hover:bg-brand-700 press"
+          className="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-600 text-white px-4 py-2 text-sm font-medium hover:bg-brand-700 press"
         >
           <Plus className="h-4 w-4" /> Novo usuário
         </button>
@@ -109,7 +125,12 @@ export default function UsuariosManager({
       )}
 
       <div className="rounded-2xl border border-slate-200 bg-white divide-y divide-slate-100">
-        {usuarios.map((u) => {
+        {filtrados.length === 0 && (
+          <p className="px-4 py-8 text-center text-slate-400 text-sm">
+            Nenhum usuário encontrado.
+          </p>
+        )}
+        {filtrados.map((u) => {
           const isAdmin = u.role === "admin";
           const liberadas = permsPorUser.get(u.id) ?? new Set<string>();
           const exp = expandido === u.id;
