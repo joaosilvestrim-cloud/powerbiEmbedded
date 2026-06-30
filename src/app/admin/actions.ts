@@ -55,11 +55,15 @@ export async function removerArea(id: string) {
 // Painéis (relatórios) — sempre dentro de uma área
 // ============================================================
 // Extrai a URL do que o usuário colar: aceita o link cru (https://…)
-// ou o código <iframe ... src="…"> inteiro.
+// ou o código <iframe ... src="…"> inteiro. Tolerante a sujeira de cópia
+// (aspas/%22 grudados, espaços, atributos depois do src).
 function extrairEmbedUrl(bruto: string): string {
   const txt = bruto.trim();
-  const m = txt.match(/src\s*=\s*["']([^"']+)["']/i);
-  const url = (m ? m[1] : txt).trim();
+  // Captura o src até a primeira aspa, espaço ou ">". Sem src, usa o texto.
+  const m = txt.match(/src\s*=\s*["']?([^"'\s>]+)/i);
+  let url = (m ? m[1] : txt).trim();
+  url = url.split(/\s/)[0]; // corta no primeiro espaço
+  url = url.replace(/(?:%22|["'>])+$/i, ""); // remove %22/aspas/"> no fim
   return url;
 }
 
