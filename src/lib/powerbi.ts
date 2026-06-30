@@ -125,14 +125,39 @@ export interface PowerBiEmbed {
   expiry: string;
 }
 
+// RLS dinâmico: identidade efetiva aplicada no servidor da Microsoft.
+// - username: valor usado pelas regras DAX (USERNAME()/USERPRINCIPALNAME())
+// - roles: nome(s) da(s) role(s) de RLS definidas no .pbix (ex.: "Cliente")
+// - customData: alternativa usada com CUSTOMDATA() (comum com service principal)
+export interface EffectiveIdentity {
+  username: string;
+  roles: string[];
+  customData?: string;
+}
+
 // Passo 3 — gera o embed token (accessLevel View) para o relatório.
+// Se `identity` for informado, o token nasce JÁ FILTRADO (RLS dinâmico):
+// o usuário não consegue ver dados de outro cliente nem inspecionando a página.
 export async function generateEmbed(
   cred: PbiCredenciais,
   workspaceId: string,
-  reportId: string
+  reportId: string,
+  identity?: EffectiveIdentity
 ): Promise<PowerBiEmbed> {
   const aadToken = await getAadToken(cred);
   const info = await getReportInfo(aadToken, workspaceId, reportId);
+
+  const body: Record<string, unknown> = { accessLevel: "View" };
+  if (identity && identity.roles.length > 0) {
+    body.identities = [
+      {
+        username: identity.username,
+        roles: identity.roles,
+        datasets: [info.datasetId],
+        ...(identity.customData ? { customData: identity.customData } : {}),
+      },
+    ];
+  }
 
   const res = await fetch(
     `${PBI_API}/groups/${workspaceId}/reports/${reportId}/GenerateToken`,
@@ -142,7 +167,7 @@ export async function generateEmbed(
         Authorization: `Bearer ${aadToken}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ accessLevel: "View" }),
+      body: JSON.stringify(body),
       cache: "no-store",
     }
   );
