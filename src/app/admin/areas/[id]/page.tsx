@@ -6,7 +6,8 @@ import { createClient, createAdminClient } from "@/lib/supabase/server";
 import AppShell from "@/components/AppShell";
 import PaineisManager from "@/components/admin/PaineisManager";
 import PowerBIConnect from "@/components/admin/PowerBIConnect";
-import type { Area, Relatorio } from "@/lib/types";
+import AreaUsuarios from "@/components/admin/AreaUsuarios";
+import type { Area, Relatorio, Profile } from "@/lib/types";
 
 export default async function AreaDetalhePage({
   params,
@@ -17,21 +18,29 @@ export default async function AreaDetalhePage({
   const profile = await requireAdmin();
   const supabase = await createClient();
 
-  const [{ data: area }, { data: paineis }, { data: cfg }] = await Promise.all([
+  const [
+    { data: area },
+    { data: paineis },
+    { data: cfg },
+    { data: usuarios },
+    { data: perms },
+  ] = await Promise.all([
     supabase.from("areas").select("*").eq("id", id).single(),
-    supabase
-      .from("relatorios")
-      .select("*")
-      .eq("area_id", id)
-      .order("nome"),
+    supabase.from("relatorios").select("*").eq("area_id", id).order("nome"),
     createAdminClient()
       .from("config_powerbi")
       .select("tenant_id, client_id, client_secret")
       .eq("id", true)
       .single(),
+    supabase.from("profiles").select("*").order("nome"),
+    supabase.from("permissoes_area").select("user_id").eq("area_id", id),
   ]);
 
   if (!area) notFound();
+
+  const comAcesso = ((perms ?? []) as { user_id: string }[]).map(
+    (p) => p.user_id
+  );
 
   const configurado = Boolean(
     cfg?.tenant_id && cfg?.client_id && cfg?.client_secret
@@ -55,14 +64,27 @@ export default async function AreaDetalhePage({
       }
     >
       <div className="grid gap-6 lg:grid-cols-2 items-start">
-        <div>
-          <h3 className="text-sm font-semibold text-slate-700 mb-2">
-            Painéis da área
-          </h3>
-          <PaineisManager
-            areaId={id}
-            paineis={(paineis ?? []) as Relatorio[]}
-          />
+        <div className="space-y-6">
+          <div>
+            <h3 className="text-sm font-semibold text-slate-700 mb-2">
+              Painéis da área
+            </h3>
+            <PaineisManager
+              areaId={id}
+              paineis={(paineis ?? []) as Relatorio[]}
+            />
+          </div>
+
+          <div>
+            <h3 className="text-sm font-semibold text-slate-700 mb-2">
+              Acesso de usuários
+            </h3>
+            <AreaUsuarios
+              areaId={id}
+              usuarios={(usuarios ?? []) as Profile[]}
+              comAcesso={comAcesso}
+            />
+          </div>
         </div>
 
         <div>

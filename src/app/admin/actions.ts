@@ -172,12 +172,58 @@ export async function definirPermissaoArea(
   revalidatePath("/admin/usuarios");
 }
 
+// Concede exatamente o conjunto de áreas informado (usado por
+// "marcar todas" / "limpar"): remove as atuais e insere as novas.
+export async function definirAreas(userId: string, areaIds: string[]) {
+  const supabase = await assertAdmin();
+  await supabase.from("permissoes_area").delete().eq("user_id", userId);
+  if (areaIds.length > 0) {
+    await supabase
+      .from("permissoes_area")
+      .insert(areaIds.map((area_id) => ({ user_id: userId, area_id })));
+  }
+  revalidatePath("/admin/usuarios");
+}
+
 // ============================================================
 // Usuários
 // ============================================================
 export async function definirRole(userId: string, role: "admin" | "user") {
   const supabase = await assertAdmin();
   await supabase.from("profiles").update({ role }).eq("id", userId);
+  revalidatePath("/admin/usuarios");
+}
+
+// Ativa/desativa o usuário: bane no Auth (bloqueia login) e marca o perfil.
+export async function definirAtivo(userId: string, ativo: boolean) {
+  await assertAdmin();
+  const admin = createAdminClient();
+  await admin.auth.admin.updateUserById(userId, {
+    ban_duration: ativo ? "none" : "876000h",
+  });
+  await admin.from("profiles").update({ ativo }).eq("id", userId);
+  revalidatePath("/admin/usuarios");
+}
+
+// Gera uma senha temporária nova e a retorna para o admin repassar.
+export async function redefinirSenha(userId: string): Promise<string> {
+  await assertAdmin();
+  const admin = createAdminClient();
+  const nova =
+    "Dd" + Math.random().toString(36).slice(2, 8) + Math.floor(10 + Math.random() * 89);
+  const { error } = await admin.auth.admin.updateUserById(userId, {
+    password: nova,
+  });
+  if (error) throw new Error(error.message);
+  return nova;
+}
+
+// Remove o usuário (o profile cai por cascade do FK em auth.users).
+export async function removerUsuario(userId: string) {
+  await assertAdmin();
+  const admin = createAdminClient();
+  const { error } = await admin.auth.admin.deleteUser(userId);
+  if (error) throw new Error(error.message);
   revalidatePath("/admin/usuarios");
 }
 

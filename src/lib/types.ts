@@ -5,6 +5,7 @@ export interface Profile {
   nome: string;
   email: string;
   role: Role;
+  ativo: boolean;
   criado_em: string;
 }
 
