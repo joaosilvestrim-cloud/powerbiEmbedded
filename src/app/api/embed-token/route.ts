@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
-import { generateEmbed } from "@/lib/powerbi";
+import { generateEmbed, type EffectiveIdentity } from "@/lib/powerbi";
 
 // POST /api/embed-token  { relatorioId }
 // Valida autenticação + permissão (via RLS) e devolve o embed token.
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
   // for admin OU tiver permissão — então isto já é o controle de acesso.
   const { data: relatorio, error } = await supabase
     .from("relatorios")
-    .select("id, pbi_workspace_id, pbi_report_id, ativo")
+    .select("id, pbi_workspace_id, pbi_report_id, rls_role, ativo")
     .eq("id", relatorioId)
     .eq("ativo", true)
     .single();
@@ -42,6 +42,23 @@ export async function POST(request: Request) {
       { error: "Relatório não encontrado ou sem permissão" },
       { status: 403 }
     );
+  }
+
+  // RLS dinâmico: se o painel tem uma role definida, monta a identidade
+  // efetiva a partir do usuário (identidade RLS, com fallback no e-mail).
+  let identity: EffectiveIdentity | undefined;
+  if (relatorio.rls_role) {
+    const { data: perfil } = await supabase
+      .from("profiles")
+      .select("rls_identity, email")
+      .eq("id", user.id)
+      .single();
+    const valor = perfil?.rls_identity || perfil?.email || user.email || "";
+    identity = {
+      username: valor,
+      roles: [relatorio.rls_role],
+      customData: perfil?.rls_identity || undefined,
+    };
   }
 
   // Credenciais do service principal — lidas via service role (servidor),
@@ -64,7 +81,8 @@ export async function POST(request: Request) {
     const embed = await generateEmbed(
       cred,
       relatorio.pbi_workspace_id,
-      relatorio.pbi_report_id
+      relatorio.pbi_report_id,
+      identity
     );
     return NextResponse.json(embed);
   } catch (e) {

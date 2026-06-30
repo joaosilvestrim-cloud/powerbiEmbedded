@@ -136,6 +136,7 @@ export async function atualizarPainel(
     .update({
       nome: String(formData.get("nome") || "").trim(),
       descricao: String(formData.get("descricao") || "").trim(),
+      rls_role: String(formData.get("rls_role") || "").trim() || null,
     })
     .eq("id", id);
   revalidatePath(`/admin/areas/${areaId}`);
@@ -195,6 +196,16 @@ export async function definirAreas(userId: string, areaIds: string[]) {
 export async function definirRole(userId: string, role: "admin" | "user") {
   const supabase = await assertAdmin();
   await supabase.from("profiles").update({ role }).eq("id", userId);
+  revalidatePath("/admin/usuarios");
+}
+
+// Define a identidade RLS do usuário (valor usado no filtro dinâmico).
+export async function definirIdentidadeRls(userId: string, valor: string) {
+  const supabase = await assertAdmin();
+  await supabase
+    .from("profiles")
+    .update({ rls_identity: valor.trim() || null })
+    .eq("id", userId);
   revalidatePath("/admin/usuarios");
 }
 

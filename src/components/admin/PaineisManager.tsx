@@ -58,6 +58,15 @@ export default function PaineisManager({
                 placeholder="Descrição"
                 className="rounded-lg border border-slate-300 px-3 py-2 text-sm"
               />
+              <label className="sm:col-span-2 text-xs text-slate-500">
+                Role de RLS (opcional — só para painéis via service principal)
+                <input
+                  name="rls_role"
+                  defaultValue={p.rls_role ?? ""}
+                  placeholder="Ex.: Cliente (nome da role no .pbix)"
+                  className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm font-mono"
+                />
+              </label>
               <div className="sm:col-span-2 flex gap-2">
                 <button
                   type="submit"

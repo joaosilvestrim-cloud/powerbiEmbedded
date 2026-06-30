@@ -20,6 +20,7 @@ import {
   definirPermissaoArea,
   definirAreas,
   definirAtivo,
+  definirIdentidadeRls,
   redefinirSenha,
   removerUsuario,
 } from "@/app/admin/actions";
@@ -372,7 +373,25 @@ export default function UsuariosManager({
               </div>
 
               {exp && !isAdmin && (
-                <div className="bg-slate-50 px-4 py-3 border-t border-slate-100 animate-slide-down overflow-hidden">
+                <div className="bg-slate-50 px-4 py-3 border-t border-slate-100 animate-slide-down overflow-hidden space-y-3">
+                  <label className="block text-xs text-slate-500">
+                    Identidade RLS (filtro de dados — usado no RLS dinâmico do
+                    Power BI)
+                    <input
+                      defaultValue={u.rls_identity ?? ""}
+                      placeholder="Ex.: 123 / cnpj do cliente / e-mail"
+                      onBlur={(e) => {
+                        const v = e.target.value;
+                        if (v !== (u.rls_identity ?? ""))
+                          startTransition(async () => {
+                            await definirIdentidadeRls(u.id, v);
+                            toast("Identidade RLS salva");
+                          });
+                      }}
+                      className="mt-1 w-full sm:max-w-sm rounded-lg border border-slate-300 px-3 py-2 text-sm font-mono"
+                    />
+                  </label>
+
                   <div className="flex items-center justify-between mb-2">
                     <p className="text-xs font-medium text-slate-500">
                       Áreas liberadas para {u.nome || u.email}

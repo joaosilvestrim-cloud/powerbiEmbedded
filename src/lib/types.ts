@@ -6,6 +6,7 @@ export interface Profile {
   email: string;
   role: Role;
   ativo: boolean;
+  rls_identity: string | null;
   criado_em: string;
 }
 
@@ -24,6 +25,7 @@ export interface Relatorio {
   pbi_workspace_id: string;
   pbi_report_id: string;
   embed_url: string | null;
+  rls_role: string | null;
   area_id: string | null;
   ativo: boolean;
   criado_em: string;
