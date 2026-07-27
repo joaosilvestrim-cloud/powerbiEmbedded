@@ -70,9 +70,25 @@
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+html {
+  /* faz inputs, selects, scrollbars e checkboxes nativos ficarem escuros */
+  color-scheme: dark;
+}
 body {
   font-family: var(--font-sora), var(--font-geist-sans), system-ui, sans-serif;
   color: #e7edf6;
+}
+
+/* Campos de formulário no tema escuro */
+input,
+textarea,
+select {
+  background-color: rgba(255, 255, 255, 0.04);
+  color: #e7edf6;
+}
+input::placeholder,
+textarea::placeholder {
+  color: #6a7a92;
 }
 
 /* ============================================================
