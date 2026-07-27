@@ -14,7 +14,7 @@ interface Passo {
 
 const CORES: Record<Onde, string> = {
   Azure: "bg-blue-100 text-blue-700",
-  "Power BI": "bg-amber-100 text-amber-700",
+  "Power BI": "bg-amber-500/15 text-amber-300",
   Portal: "bg-brand-100 text-brand-700",
 };
 
@@ -174,7 +174,7 @@ export default function GuiaConfiguracao() {
                   onClick={() => toggleFeito(i)}
                   className={`h-6 w-6 shrink-0 rounded-full border flex items-center justify-center press ${
                     feito
-                      ? "bg-green-500 border-green-500 text-white"
+                      ? "bg-emerald-500/100 border-green-500 text-[#ffffff]"
                       : "border-slate-300 text-transparent hover:border-brand-400"
                   }`}
                   title={feito ? "Concluído" : "Marcar como feito"}
@@ -217,7 +217,7 @@ export default function GuiaConfiguracao() {
                     ))}
                   </ul>
                   {p.aviso && (
-                    <div className="mt-2 flex items-start gap-2 rounded-lg bg-amber-50 border border-amber-200 p-2.5 text-xs text-amber-800">
+                    <div className="mt-2 flex items-start gap-2 rounded-lg bg-amber-500/10 border border-amber-500/30 p-2.5 text-xs text-amber-300">
                       <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
                       <span>{p.aviso}</span>
                     </div>

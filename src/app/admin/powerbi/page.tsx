@@ -31,7 +31,7 @@ export default async function AdminPowerBIPage() {
         href="/admin/areas"
         className="mb-6 flex items-center gap-3 rounded-2xl border border-accent-400/40 bg-gradient-to-r from-accent-400/10 to-brand-400/10 p-4 hover:shadow-md card-lift"
       >
-        <div className="h-10 w-10 shrink-0 rounded-xl bg-brand-gradient flex items-center justify-center text-white">
+        <div className="h-10 w-10 shrink-0 rounded-xl bg-brand-gradient flex items-center justify-center text-[#ffffff]">
           <Sparkles className="h-5 w-5" />
         </div>
         <div className="min-w-0 flex-1">

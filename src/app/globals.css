@@ -1,19 +1,35 @@
 @import "tailwindcss";
 
 /* ============================================================
-   Paleta DriveData — gradiente verde → azul do logo.
-   brand  = azul (ponta azul do logo)
-   accent = verde (ponta verde do logo)
+   DriveData — tema ESCURO (navy + vidro + gradiente verde→azul)
+   Estratégia: redefinimos a escala slate/white para tons escuros,
+   então todo o app herda o dark sem mexer em cada componente.
    ============================================================ */
 @theme {
-  --color-brand-50: #eff9ff;
-  --color-brand-100: #dcf1ff;
-  --color-brand-200: #b3e4ff;
-  --color-brand-300: #6fd0ff;
-  --color-brand-400: #1fb6f4;
-  --color-brand-500: #0aa0e3;
-  --color-brand-600: #0284c7;
-  --color-brand-700: #0a66a0;
+  /* superfície dos cards (bg-white) */
+  --color-white: #0f1c30;
+
+  /* escala slate invertida para dark */
+  --color-slate-50: #0b1524;
+  --color-slate-100: #14243a;
+  --color-slate-200: #24374f;
+  --color-slate-300: #31465f;
+  --color-slate-400: #6a7a92;
+  --color-slate-500: #8695ad;
+  --color-slate-600: #a3b1c7;
+  --color-slate-700: #c4cfdf;
+  --color-slate-800: #e7edf6;
+  --color-slate-900: #f3f7fc;
+
+  /* marca — azul (ponta azul do logo) */
+  --color-brand-50: #0e2740;
+  --color-brand-100: #123252;
+  --color-brand-200: #16436e;
+  --color-brand-300: #1f6fa8;
+  --color-brand-400: #2aa5e0;
+  --color-brand-500: #18b6f4;
+  --color-brand-600: #1aa6e6;
+  --color-brand-700: #2f7fbf;
   --color-brand-800: #0e567f;
   --color-brand-900: #114a6a;
 
@@ -22,57 +38,58 @@
   --color-accent-600: #16a34a;
 }
 
-/* Gradiente da marca (logo, botões de destaque, faixas) */
+/* Gradiente da marca (logo, botões, faixas) */
 .bg-brand-gradient {
-  background-image: linear-gradient(135deg, #22c55e 0%, #14b8d4 50%, #0284c7 100%);
+  background-image: linear-gradient(120deg, #3ddc84 0%, #14c1c9 48%, #1a86e6 100%);
 }
 .text-brand-gradient {
-  background: linear-gradient(135deg, #16a34a 0%, #0284c7 100%);
+  background: linear-gradient(120deg, #5be59a 0%, #35c9d6 45%, #4aa6ff 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
+/* Fundo do app: navy profundo + brilhos + grade sutil */
+.app-bg {
+  background-color: #080f1c;
+  background-image:
+    radial-gradient(60rem 40rem at 85% -5%, rgba(26, 134, 230, 0.18), transparent 60%),
+    radial-gradient(50rem 40rem at -5% 110%, rgba(61, 220, 132, 0.14), transparent 55%),
+    linear-gradient(180deg, #0a1220 0%, #080f1c 100%);
+}
+.grid-pattern {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+/* Vidro (glass) para superfícies elevadas */
+.glass {
+  background: rgba(17, 30, 51, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
 body {
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-sora), var(--font-geist-sans), system-ui, sans-serif;
+  color: #e7edf6;
 }
 
 /* ============================================================
    Animações
    ============================================================ */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-@keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.96) translateY(-4px); }
-  to   { opacity: 1; transform: scale(1) translateY(0); }
-}
-@keyframes slideDown {
-  from { opacity: 0; transform: translateY(-6px); max-height: 0; }
-  to   { opacity: 1; transform: translateY(0); max-height: 1200px; }
-}
-@keyframes slideIn {
-  from { transform: translateX(-100%); }
-  to   { transform: translateX(0); }
-}
-.animate-slide-in { animation: slideIn 0.24s cubic-bezier(0.22, 1, 0.36, 1) both; }
-
-@keyframes shimmer {
-  0% { background-position: -480px 0; }
-  100% { background-position: 480px 0; }
-}
+@keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes scaleIn { from { opacity: 0; transform: scale(0.96) translateY(-4px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-6px); max-height: 0; } to { opacity: 1; transform: translateY(0); max-height: 1200px; } }
+@keyframes slideIn { from { transform: translateX(-100%); } to { transform: translateX(0); } }
 
 .animate-fade-up { animation: fadeUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
 .animate-fade-in { animation: fadeIn 0.35s ease both; }
 .animate-scale-in { animation: scaleIn 0.16s cubic-bezier(0.22, 1, 0.36, 1) both; }
 .animate-slide-down { animation: slideDown 0.28s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.animate-slide-in { animation: slideIn 0.24s cubic-bezier(0.22, 1, 0.36, 1) both; }
 
-/* Entrada escalonada de grades de cards */
 .stagger > * { animation: fadeUp 0.45s cubic-bezier(0.22, 1, 0.36, 1) both; }
 .stagger > *:nth-child(1) { animation-delay: 0.02s; }
 .stagger > *:nth-child(2) { animation-delay: 0.06s; }
@@ -84,28 +101,16 @@ body {
 .stagger > *:nth-child(8) { animation-delay: 0.30s; }
 .stagger > *:nth-child(9) { animation-delay: 0.34s; }
 
-/* Card com leve elevação ao passar o mouse */
-.card-lift {
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-  will-change: transform;
-}
-.card-lift:hover { transform: translateY(-3px); }
+.card-lift { transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; will-change: transform; }
+.card-lift:hover { transform: translateY(-3px); box-shadow: 0 12px 40px -12px rgba(26, 134, 230, 0.35); }
 
-/* Micro-interação de clique em botões interativos */
-button:not(:disabled),
-a[href] {
-  transition: transform 0.12s ease, background-color 0.15s ease,
-    color 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease;
+button:not(:disabled), a[href] {
+  transition: transform 0.12s ease, background-color 0.15s ease, color 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
 }
 .press:active { transform: scale(0.97); }
 
 @media (prefers-reduced-motion: reduce) {
-  *,
-  .animate-fade-up,
-  .animate-fade-in,
-  .animate-scale-in,
-  .animate-slide-down,
-  .stagger > * {
+  *, .animate-fade-up, .animate-fade-in, .animate-scale-in, .animate-slide-down, .stagger > * {
     animation: none !important;
     transition: none !important;
   }

@@ -95,7 +95,7 @@ export default function PowerBIConnect({
       <button
         onClick={testar}
         disabled={!configurado || testando}
-        className="inline-flex items-center gap-2 rounded-lg bg-slate-800 text-white px-4 py-2 text-sm font-medium hover:bg-slate-900 disabled:opacity-50"
+        className="inline-flex items-center gap-2 rounded-lg bg-brand-600 text-[#ffffff] px-4 py-2 text-sm font-medium hover:bg-brand-700 disabled:opacity-50"
       >
         {testando ? (
           <Loader2 className="h-4 w-4 animate-spin" />
@@ -115,8 +115,8 @@ export default function PowerBIConnect({
         <div
           className={`flex items-start gap-2 rounded-lg p-3 text-sm ${
             status === "ok"
-              ? "bg-green-50 text-green-700"
-              : "bg-amber-50 text-amber-700"
+              ? "bg-emerald-500/15 text-emerald-300"
+              : "bg-amber-500/10 text-amber-300"
           }`}
         >
           {status === "ok" ? (
@@ -176,8 +176,8 @@ export default function PowerBIConnect({
                         disabled={pending || done}
                         className={`inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-medium ${
                           done
-                            ? "bg-green-100 text-green-700"
-                            : "bg-brand-600 text-white hover:bg-brand-700"
+                            ? "bg-emerald-500/15 text-emerald-300"
+                            : "bg-brand-600 text-[#ffffff] hover:bg-brand-700"
                         } disabled:opacity-70`}
                       >
                         {done ? (

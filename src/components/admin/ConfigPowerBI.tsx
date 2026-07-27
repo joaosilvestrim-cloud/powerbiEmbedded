@@ -55,7 +55,7 @@ export default function ConfigPowerBI({
         <span className="block text-slate-700 mb-1">
           Client Secret{" "}
           {secretDefinido && (
-            <span className="text-green-600 text-xs">
+            <span className="text-emerald-400 text-xs">
               (já configurado — deixe em branco para manter)
             </span>
           )}
@@ -72,11 +72,11 @@ export default function ConfigPowerBI({
         <button
           type="submit"
           disabled={pending}
-          className="rounded-lg bg-brand-600 text-white px-4 py-2 text-sm hover:bg-brand-700 disabled:opacity-60"
+          className="rounded-lg bg-brand-600 text-[#ffffff] px-4 py-2 text-sm hover:bg-brand-700 disabled:opacity-60"
         >
           {pending ? "Salvando..." : "Salvar configuração"}
         </button>
-        {salvo && <span className="text-sm text-green-600">Salvo ✓</span>}
+        {salvo && <span className="text-sm text-emerald-400">Salvo ✓</span>}
       </div>
     </form>
   );

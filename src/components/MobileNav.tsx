@@ -21,7 +21,7 @@ export default function MobileNav({ isAdmin }: { isAdmin: boolean }) {
       {aberto && (
         <div className="fixed inset-0 z-40">
           <div
-            className="absolute inset-0 bg-slate-900/40 animate-fade-in"
+            className="absolute inset-0 bg-black/50 animate-fade-in"
             onClick={() => setAberto(false)}
           />
           <aside className="absolute left-0 top-0 h-full w-64 bg-white shadow-xl flex flex-col animate-slide-in">

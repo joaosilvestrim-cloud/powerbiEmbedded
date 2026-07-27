@@ -27,11 +27,11 @@ export default function AppShell({
   children: ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen bg-slate-50">
+    <div className="flex min-h-screen app-bg">
       <Sidebar isAdmin={profile.role === "admin"} />
 
       <div className="flex-1 flex flex-col min-w-0">
-        <header className="h-16 shrink-0 bg-white border-b border-slate-200 flex items-center justify-between px-3 sm:px-6 gap-2">
+        <header className="h-16 shrink-0 bg-white/70 backdrop-blur border-b border-slate-200 flex items-center justify-between px-3 sm:px-6 gap-2">
           <div className="flex items-center gap-2 min-w-0">
             <MobileNav isAdmin={profile.role === "admin"} />
             <div className="min-w-0">

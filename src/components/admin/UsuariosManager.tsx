@@ -175,7 +175,7 @@ export default function UsuariosManager({
         </div>
         <button
           onClick={() => setAberto((v) => !v)}
-          className="lg:ml-auto inline-flex items-center justify-center gap-2 rounded-lg bg-brand-600 text-white px-4 py-2 text-sm font-medium hover:bg-brand-700 press"
+          className="lg:ml-auto inline-flex items-center justify-center gap-2 rounded-lg bg-brand-600 text-[#ffffff] px-4 py-2 text-sm font-medium hover:bg-brand-700 press"
         >
           <Plus className="h-4 w-4" /> Novo usuário
         </button>
@@ -228,12 +228,12 @@ export default function UsuariosManager({
               className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
             />
           </label>
-          {erro && <p className="sm:col-span-3 text-sm text-red-600">{erro}</p>}
+          {erro && <p className="sm:col-span-3 text-sm text-red-400">{erro}</p>}
           <div className="sm:col-span-3 flex gap-2">
             <button
               type="submit"
               disabled={pending}
-              className="rounded-lg bg-brand-600 text-white px-4 py-2 text-sm hover:bg-brand-700 disabled:opacity-60 press"
+              className="rounded-lg bg-brand-600 text-[#ffffff] px-4 py-2 text-sm hover:bg-brand-700 disabled:opacity-60 press"
             >
               Criar usuário
             </button>
@@ -362,7 +362,7 @@ export default function UsuariosManager({
                         <div className="my-1 border-t border-slate-100" />
                         <button
                           onClick={() => acaoRemover(u)}
-                          className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-red-600 hover:bg-red-50"
+                          className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-red-400 hover:bg-red-500/10"
                         >
                           <Trash2 className="h-4 w-4" /> Remover usuário
                         </button>

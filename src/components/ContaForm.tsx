@@ -80,7 +80,7 @@ export default function ContaForm({
         <button
           type="submit"
           disabled={salvandoNome}
-          className="rounded-lg bg-brand-600 text-white px-4 py-2 text-sm hover:bg-brand-700 disabled:opacity-60 press"
+          className="rounded-lg bg-brand-600 text-[#ffffff] px-4 py-2 text-sm hover:bg-brand-700 disabled:opacity-60 press"
         >
           {salvandoNome ? "Salvando…" : "Salvar nome"}
         </button>
@@ -116,7 +116,7 @@ export default function ContaForm({
         <button
           type="submit"
           disabled={salvandoSenha}
-          className="rounded-lg bg-brand-600 text-white px-4 py-2 text-sm hover:bg-brand-700 disabled:opacity-60 press"
+          className="rounded-lg bg-brand-600 text-[#ffffff] px-4 py-2 text-sm hover:bg-brand-700 disabled:opacity-60 press"
         >
           {salvandoSenha ? "Salvando…" : "Trocar senha"}
         </button>

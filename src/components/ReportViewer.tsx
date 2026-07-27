@@ -60,12 +60,12 @@ export default function ReportViewer({ relatorioId }: { relatorioId: string }) {
 
   if (pronto && estado.erro) {
     return (
-      <div className="rounded-2xl border border-amber-200 bg-amber-50 p-8 text-center">
+      <div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-8 text-center">
         <AlertTriangle className="mx-auto h-8 w-8 text-amber-500" />
-        <p className="mt-3 font-medium text-amber-800">{estado.erro}</p>
+        <p className="mt-3 font-medium text-amber-300">{estado.erro}</p>
         <button
           onClick={() => setTentativa((t) => t + 1)}
-          className="mt-4 inline-flex items-center gap-2 rounded-lg border border-amber-300 bg-white px-4 py-2 text-sm text-amber-700 hover:bg-amber-100"
+          className="mt-4 inline-flex items-center gap-2 rounded-lg border border-amber-300 bg-white px-4 py-2 text-sm text-amber-300 hover:bg-amber-500/15"
         >
           <RefreshCw className="h-4 w-4" /> Tentar novamente
         </button>

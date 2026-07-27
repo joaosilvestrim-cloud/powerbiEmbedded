@@ -50,7 +50,7 @@ export default function AreasManager({
         <SearchInput value={q} onChange={setQ} placeholder="Buscar área…" />
         <button
           onClick={abrirCriar}
-          className="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-600 text-white px-4 py-2 text-sm font-medium hover:bg-brand-700 press"
+          className="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-600 text-[#ffffff] px-4 py-2 text-sm font-medium hover:bg-brand-700 press"
         >
           <Plus className="h-4 w-4" /> Nova área
         </button>
@@ -118,7 +118,7 @@ export default function AreasManager({
             <button
               type="submit"
               disabled={pending}
-              className="rounded-lg bg-brand-600 text-white px-4 py-2 text-sm hover:bg-brand-700 disabled:opacity-60 press"
+              className="rounded-lg bg-brand-600 text-[#ffffff] px-4 py-2 text-sm hover:bg-brand-700 disabled:opacity-60 press"
             >
               {form.modo === "criar" ? "Salvar área" : "Salvar alterações"}
             </button>
@@ -178,7 +178,7 @@ export default function AreasManager({
                             toast("Área removida");
                           });
                       }}
-                      className="text-slate-300 hover:text-red-600 p-1 press"
+                      className="text-slate-300 hover:text-red-400 p-1 press"
                       title="Remover área"
                     >
                       <Trash2 className="h-4 w-4" />

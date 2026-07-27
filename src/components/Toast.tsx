@@ -50,9 +50,9 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             className="flex items-center gap-2 rounded-xl border bg-white px-4 py-2.5 shadow-lg animate-scale-in"
           >
             {t.tipo === "sucesso" ? (
-              <CheckCircle2 className="h-4 w-4 text-green-600" />
+              <CheckCircle2 className="h-4 w-4 text-emerald-400" />
             ) : (
-              <AlertTriangle className="h-4 w-4 text-amber-600" />
+              <AlertTriangle className="h-4 w-4 text-amber-400" />
             )}
             <span className="text-sm text-slate-700">{t.msg}</span>
             <button

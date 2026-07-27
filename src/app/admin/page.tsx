@@ -49,14 +49,14 @@ export default async function AdminOverviewPage() {
       sub: "ativos",
       icon: FileBarChart,
       href: "/admin/areas",
-      cor: "bg-violet-50 text-violet-600",
+      cor: "bg-violet-500/15 text-violet-300",
     },
     {
       label: "Usuários",
       valor: nUsuarios ?? 0,
       icon: Users,
       href: "/admin/usuarios",
-      cor: "bg-blue-50 text-blue-600",
+      cor: "bg-sky-500/15 text-sky-300",
     },
   ];
 
@@ -98,13 +98,13 @@ export default async function AdminOverviewPage() {
           href="/admin/powerbi"
           className="rounded-2xl border border-slate-200 bg-white p-5 hover:shadow-lg card-lift press"
         >
-          <div className="h-10 w-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+          <div className="h-10 w-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center">
             <PlugZap className="h-5 w-5" />
           </div>
           <div className="mt-4 flex items-center gap-2">
             {pbiOk ? (
               <>
-                <CheckCircle2 className="h-5 w-5 text-green-600" />
+                <CheckCircle2 className="h-5 w-5 text-emerald-400" />
                 <span className="text-lg font-semibold text-slate-800">
                   Conectado
                 </span>

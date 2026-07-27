@@ -71,7 +71,7 @@ export default function PaineisManager({
                 <button
                   type="submit"
                   disabled={pending}
-                  className="rounded-lg bg-brand-600 text-white px-3 py-1.5 text-sm hover:bg-brand-700 press"
+                  className="rounded-lg bg-brand-600 text-[#ffffff] px-3 py-1.5 text-sm hover:bg-brand-700 press"
                 >
                   Salvar
                 </button>
@@ -109,7 +109,7 @@ export default function PaineisManager({
                 }
                 className={`rounded-full px-2.5 py-0.5 text-xs font-medium press ${
                   p.ativo
-                    ? "bg-green-100 text-green-700"
+                    ? "bg-emerald-500/15 text-emerald-300"
                     : "bg-slate-100 text-slate-500"
                 }`}
               >
@@ -131,7 +131,7 @@ export default function PaineisManager({
                       toast("Painel removido");
                     });
                 }}
-                className="text-slate-300 hover:text-red-600 press"
+                className="text-slate-300 hover:text-red-400 press"
                 title="Remover painel"
               >
                 <Trash2 className="h-4 w-4" />
@@ -185,12 +185,12 @@ export default function PaineisManager({
               e cole acima — o portal extrai a URL automaticamente.
             </span>
           </div>
-          {erro && <p className="text-sm text-red-600">{erro}</p>}
+          {erro && <p className="text-sm text-red-400">{erro}</p>}
           <div className="flex gap-2">
             <button
               type="submit"
               disabled={pending}
-              className="rounded-lg bg-brand-600 text-white px-4 py-2 text-sm hover:bg-brand-700 disabled:opacity-60 press"
+              className="rounded-lg bg-brand-600 text-[#ffffff] px-4 py-2 text-sm hover:bg-brand-700 disabled:opacity-60 press"
             >
               Adicionar painel
             </button>
@@ -209,7 +209,7 @@ export default function PaineisManager({
       ) : (
         <button
           onClick={() => setAberto(true)}
-          className="inline-flex items-center gap-2 rounded-lg bg-brand-600 text-white px-4 py-2 text-sm font-medium hover:bg-brand-700 press"
+          className="inline-flex items-center gap-2 rounded-lg bg-brand-600 text-[#ffffff] px-4 py-2 text-sm font-medium hover:bg-brand-700 press"
         >
           <Plus className="h-4 w-4" /> Adicionar painel por link
         </button>
