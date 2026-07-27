@@ -31,7 +31,9 @@ export default function ReportViewer({ relatorioId }: { relatorioId: string }) {
         });
         if (!res.ok) {
           const j = await res.json().catch(() => ({}));
-          throw new Error(j.error || "Falha ao carregar relatório");
+          throw new Error(
+            j.detalhe ? `${j.error} — ${j.detalhe}` : j.error || "Falha ao carregar relatório"
+          );
         }
         const data = (await res.json()) as EmbedConfig;
         if (ativo) setEstado({ key: reqKey, config: data });

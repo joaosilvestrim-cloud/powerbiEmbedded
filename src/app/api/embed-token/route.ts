@@ -88,7 +88,10 @@ export async function POST(request: Request) {
   } catch (e) {
     console.error("[embed-token]", e);
     return NextResponse.json(
-      { error: "Falha ao gerar token de embed do Power BI" },
+      {
+        error: "Falha ao gerar token de embed do Power BI",
+        detalhe: e instanceof Error ? e.message : String(e),
+      },
       { status: 502 }
     );
   }
