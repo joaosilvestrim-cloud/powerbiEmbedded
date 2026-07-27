@@ -3,18 +3,22 @@ import { createClient } from "@/lib/supabase/server";
 import type { Profile } from "@/lib/types";
 
 // Retorna o profile do usuário logado (ou redireciona p/ login).
+// Usa getSession() (lê do cookie, sem chamada de rede) porque o proxy
+// já revalidou o token via getUser() nesta mesma requisição — isso deixa
+// a troca de páginas bem mais rápida.
 export async function getProfile(): Promise<Profile> {
   const supabase = await createClient();
   const {
-    data: { user },
-  } = await supabase.auth.getUser();
+    data: { session },
+  } = await supabase.auth.getSession();
 
-  if (!user) redirect("/login");
+  const userId = session?.user?.id;
+  if (!userId) redirect("/login");
 
   const { data: profile } = await supabase
     .from("profiles")
     .select("*")
-    .eq("id", user.id)
+    .eq("id", userId)
     .single();
 
   if (!profile) redirect("/login");
