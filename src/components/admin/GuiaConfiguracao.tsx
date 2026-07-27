@@ -120,7 +120,10 @@ export default function GuiaConfiguracao() {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
         const arr = JSON.parse(raw) as boolean[];
-        if (Array.isArray(arr) && arr.length === PASSOS.length) setFeitos(arr);
+        if (Array.isArray(arr) && arr.length === PASSOS.length)
+          // Restauro pontual do progresso salvo (localStorage).
+          // eslint-disable-next-line react-hooks/set-state-in-effect
+          setFeitos(arr);
       }
     } catch {}
   }, []);
