@@ -149,57 +149,69 @@ export default function AreasManager({
             return (
               <div
                 key={a.id}
-                className="rounded-2xl border border-slate-200 bg-white p-5 flex flex-col hover:shadow-lg hover:border-brand-300 card-lift"
+                className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 flex flex-col hover:border-white/20 card-lift"
               >
-                <div className="flex items-start justify-between">
-                  <div
-                    className={`h-10 w-10 rounded-xl flex items-center justify-center ${c.bg} ${c.text}`}
-                  >
-                    <FolderKanban className="h-5 w-5" />
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <button
-                      onClick={() => abrirEditar(a)}
-                      className="text-slate-500 hover:text-brand-600 p-1 press"
-                      title="Editar área"
+                <div
+                  className={`pointer-events-none absolute -top-12 -right-10 h-36 w-36 rounded-full ${c.glow} opacity-[0.14] blur-3xl transition-opacity duration-300 group-hover:opacity-30`}
+                />
+                <div className="relative flex flex-col h-full">
+                  <div className="flex items-start justify-between">
+                    <div
+                      className={`h-12 w-12 rounded-2xl flex items-center justify-center ring-1 ring-inset ring-white/10 ${c.bg} ${c.text}`}
                     >
-                      <Pencil className="h-4 w-4" />
-                    </button>
-                    <button
-                      disabled={pending}
-                      onClick={() => {
-                        if (
-                          confirm(
-                            `Remover a área "${a.nome}"? Os painéis dela também serão removidos.`
+                      <FolderKanban className="h-6 w-6" />
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <button
+                        onClick={() => abrirEditar(a)}
+                        className="text-slate-500 hover:text-sky-300 p-1 press"
+                        title="Editar área"
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </button>
+                      <button
+                        disabled={pending}
+                        onClick={() => {
+                          if (
+                            confirm(
+                              `Remover a área "${a.nome}"? Os painéis dela também serão removidos.`
+                            )
                           )
-                        )
-                          startTransition(async () => {
-                            await removerArea(a.id);
-                            toast("Área removida");
-                          });
-                      }}
-                      className="text-slate-500 hover:text-red-400 p-1 press"
-                      title="Remover área"
+                            startTransition(async () => {
+                              await removerArea(a.id);
+                              toast("Área removida");
+                            });
+                        }}
+                        className="text-slate-500 hover:text-red-400 p-1 press"
+                        title="Remover área"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
+                  <h3 className="mt-4 font-semibold text-lg text-slate-800">
+                    {a.nome}
+                  </h3>
+                  {a.descricao && (
+                    <p className="text-sm text-slate-500 line-clamp-2">
+                      {a.descricao}
+                    </p>
+                  )}
+                  <div className="mt-auto pt-4 flex items-center justify-between">
+                    <span
+                      className={`inline-flex items-center gap-1.5 rounded-full ${c.bg} ${c.text} px-2.5 py-1 text-xs font-medium`}
                     >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
+                      <span className={`h-1.5 w-1.5 rounded-full ${c.dot}`} />
+                      {a.paineis} painel(is)
+                    </span>
+                    <Link
+                      href={`/admin/areas/${a.id}`}
+                      className="inline-flex items-center gap-1 text-sm font-medium text-sky-300 hover:text-sky-200"
+                    >
+                      Gerenciar <ArrowRight className="h-4 w-4" />
+                    </Link>
                   </div>
                 </div>
-                <h3 className="mt-4 font-semibold text-slate-800">{a.nome}</h3>
-                {a.descricao && (
-                  <p className="text-sm text-slate-500 line-clamp-2">
-                    {a.descricao}
-                  </p>
-                )}
-                <p className="mt-1 text-xs text-slate-400">
-                  {a.paineis} painel(is)
-                </p>
-                <Link
-                  href={`/admin/areas/${a.id}`}
-                  className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-brand-600 hover:underline"
-                >
-                  Gerenciar painéis <ArrowRight className="h-4 w-4" />
-                </Link>
               </div>
             );
           })}

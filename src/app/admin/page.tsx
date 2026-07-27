@@ -41,7 +41,7 @@ export default async function AdminOverviewPage() {
       valor: nAreas ?? 0,
       icon: FolderKanban,
       href: "/admin/areas",
-      cor: "bg-brand-50 text-brand-600",
+      cor: "bg-sky-500/15 text-sky-300",
     },
     {
       label: "Painéis",
@@ -73,22 +73,25 @@ export default async function AdminOverviewPage() {
             <Link
               key={c.label}
               href={c.href}
-              className="rounded-2xl border border-slate-200 bg-white p-5 hover:shadow-lg card-lift press"
+              className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 hover:border-white/20 card-lift press"
             >
-              <div
-                className={`h-10 w-10 rounded-xl flex items-center justify-center ${c.cor}`}
-              >
-                <Icon className="h-5 w-5" />
+              <div className="pointer-events-none absolute -top-12 -right-10 h-32 w-32 rounded-full bg-sky-500 opacity-[0.12] blur-3xl transition-opacity group-hover:opacity-25" />
+              <div className="relative">
+                <div
+                  className={`h-12 w-12 rounded-2xl flex items-center justify-center ring-1 ring-inset ring-white/10 ${c.cor}`}
+                >
+                  <Icon className="h-6 w-6" />
+                </div>
+                <p className="mt-4 text-3xl font-bold text-brand-gradient leading-none">
+                  {c.valor}{" "}
+                  {c.sub && (
+                    <span className="text-sm font-normal text-slate-400">
+                      {c.sub}
+                    </span>
+                  )}
+                </p>
+                <p className="mt-2 text-sm text-slate-500">{c.label}</p>
               </div>
-              <p className="mt-4 text-2xl font-semibold text-slate-800">
-                {c.valor}{" "}
-                {c.sub && (
-                  <span className="text-sm font-normal text-slate-400">
-                    {c.sub}
-                  </span>
-                )}
-              </p>
-              <p className="text-sm text-slate-500">{c.label}</p>
             </Link>
           );
         })}

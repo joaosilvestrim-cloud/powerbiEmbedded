@@ -67,26 +67,38 @@ export default function UserAreasGrid({
               <Link
                 key={a.id}
                 href={`/area/${a.id}`}
-                className="group flex flex-col rounded-2xl border border-slate-200 bg-white p-5 hover:border-brand-400 hover:shadow-lg card-lift press"
+                className="group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 hover:border-white/20 card-lift press"
               >
                 <div
-                  className={`h-11 w-11 rounded-xl flex items-center justify-center ${c.bg} ${c.text}`}
-                >
-                  <FolderKanban className="h-5 w-5" />
+                  className={`pointer-events-none absolute -top-12 -right-10 h-36 w-36 rounded-full ${c.glow} opacity-[0.14] blur-3xl transition-opacity duration-300 group-hover:opacity-30`}
+                />
+                <div className="relative flex flex-col h-full">
+                  <div
+                    className={`h-12 w-12 rounded-2xl flex items-center justify-center ring-1 ring-inset ring-white/10 ${c.bg} ${c.text}`}
+                  >
+                    <FolderKanban className="h-6 w-6" />
+                  </div>
+                  <h2 className="mt-4 font-semibold text-lg text-slate-800">
+                    {a.nome}
+                  </h2>
+                  {a.descricao && (
+                    <p className="mt-1 text-sm text-slate-500 line-clamp-2">
+                      {a.descricao}
+                    </p>
+                  )}
+                  <div className="mt-auto pt-4 flex items-center justify-between">
+                    <span
+                      className={`inline-flex items-center gap-1.5 rounded-full ${c.bg} ${c.text} px-2.5 py-1 text-xs font-medium`}
+                    >
+                      <span className={`h-1.5 w-1.5 rounded-full ${c.dot}`} />
+                      {a.paineis} painel(is)
+                    </span>
+                    <span className="inline-flex items-center gap-1 text-sm font-medium text-sky-300 group-hover:text-sky-200">
+                      Abrir
+                      <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition" />
+                    </span>
+                  </div>
                 </div>
-                <h2 className="mt-4 font-semibold text-slate-800">{a.nome}</h2>
-                {a.descricao && (
-                  <p className="mt-1 text-sm text-slate-500 line-clamp-2">
-                    {a.descricao}
-                  </p>
-                )}
-                <span className="mt-3 text-xs text-slate-400">
-                  {a.paineis} painel(is)
-                </span>
-                <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-brand-600">
-                  Abrir área
-                  <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition" />
-                </span>
               </Link>
             );
           })}
