@@ -57,7 +57,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             <span className="text-sm text-slate-700">{t.msg}</span>
             <button
               onClick={() => remover(t.id)}
-              className="text-slate-300 hover:text-slate-500"
+              className="text-slate-500 hover:text-slate-500"
             >
               <X className="h-3.5 w-3.5" />
             </button>

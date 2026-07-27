@@ -45,8 +45,8 @@ function LinkItem({
       onClick={onNavigate}
       className={`group relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium press ${
         active
-          ? "bg-sky-500/15 text-sky-300"
-          : "text-slate-400 hover:bg-white/5 hover:text-slate-100"
+          ? "bg-sky-500/15 text-sky-300 ring-1 ring-sky-400/20"
+          : "text-slate-500 hover:bg-white/5 hover:text-slate-800"
       }`}
     >
       <span

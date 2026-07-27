@@ -29,7 +29,7 @@ export default function UserAreasGrid({
   if (areas.length === 0) {
     return (
       <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-12 text-center">
-        <Inbox className="mx-auto h-10 w-10 text-slate-300" />
+        <Inbox className="mx-auto h-10 w-10 text-slate-500" />
         <p className="mt-3 text-slate-600 font-medium">
           Nenhuma área liberada para você ainda.
         </p>

@@ -160,7 +160,7 @@ export default function AreasManager({
                   <div className="flex items-center gap-1">
                     <button
                       onClick={() => abrirEditar(a)}
-                      className="text-slate-300 hover:text-brand-600 p-1 press"
+                      className="text-slate-500 hover:text-brand-600 p-1 press"
                       title="Editar área"
                     >
                       <Pencil className="h-4 w-4" />
@@ -178,7 +178,7 @@ export default function AreasManager({
                             toast("Área removida");
                           });
                       }}
-                      className="text-slate-300 hover:text-red-400 p-1 press"
+                      className="text-slate-500 hover:text-red-400 p-1 press"
                       title="Remover área"
                     >
                       <Trash2 className="h-4 w-4" />

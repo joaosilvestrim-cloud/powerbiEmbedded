@@ -211,7 +211,7 @@ export default function GuiaConfiguracao() {
 
               {exp && (
                 <div className="px-4 pb-3 pl-14 animate-slide-down overflow-hidden">
-                  <ul className="list-disc space-y-1 text-sm text-slate-600 marker:text-slate-300">
+                  <ul className="list-disc space-y-1 text-sm text-slate-600 marker:text-slate-500">
                     {p.itens.map((t, j) => (
                       <li key={j}>{t}</li>
                     ))}

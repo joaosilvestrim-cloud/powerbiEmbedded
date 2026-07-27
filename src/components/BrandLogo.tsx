@@ -40,18 +40,15 @@ export default function BrandLogo({
       aria-label="DriveData"
     >
       <defs>
-        <linearGradient id="ddGrad" x1="12" y1="8" x2="88" y2="92" gradientUnits="userSpaceOnUse">
+        <linearGradient id="ddGrad" x1="10" y1="8" x2="90" y2="92" gradientUnits="userSpaceOnUse">
           <stop stopColor="#3ddc84" />
           <stop offset="0.5" stopColor="#14c1c9" />
           <stop offset="1" stopColor="#1a86e6" />
         </linearGradient>
       </defs>
-      {/* Corpo "D" */}
-      <path d="M40 10 H52 A40 40 0 1 1 52 90 H40 Z" fill="url(#ddGrad)" />
-      {/* Lâmina de avanço (superior) */}
-      <path d="M14 20 L44 50 L26 68 L2 44 V26 Z" fill="url(#ddGrad)" opacity="0.9" />
-      {/* Lâmina de avanço (inferior) */}
-      <path d="M12 54 L34 76 L20 90 L4 74 V60 Z" fill="url(#ddGrad)" opacity="0.75" />
+      <rect x="6" y="6" width="88" height="88" rx="24" fill="url(#ddGrad)" />
+      <path d="M35 30 L55 50 L35 70" stroke="#fff" strokeWidth="9" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M53 30 L73 50 L53 70" stroke="#fff" strokeOpacity="0.55" strokeWidth="9" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }

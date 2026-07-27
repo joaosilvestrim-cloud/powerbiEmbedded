@@ -39,7 +39,7 @@ export default function AreaPaineisView({ paineis }: { paineis: Relatorio[] }) {
     return (
       <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-12 text-center">
         <Inbox className="mx-auto h-10 w-10 text-slate-500" />
-        <p className="mt-3 text-slate-300 font-medium">
+        <p className="mt-3 text-slate-500 font-medium">
           Nenhum painel disponível nesta área.
         </p>
       </div>
@@ -60,7 +60,7 @@ export default function AreaPaineisView({ paineis }: { paineis: Relatorio[] }) {
               className={`rounded-md p-1.5 press ${
                 visao === "grade"
                   ? "bg-sky-500/15 text-sky-300"
-                  : "text-slate-400 hover:text-slate-200"
+                  : "text-slate-400 hover:text-slate-800"
               }`}
               title="Grade"
             >
@@ -71,7 +71,7 @@ export default function AreaPaineisView({ paineis }: { paineis: Relatorio[] }) {
               className={`rounded-md p-1.5 press ${
                 visao === "lista"
                   ? "bg-sky-500/15 text-sky-300"
-                  : "text-slate-400 hover:text-slate-200"
+                  : "text-slate-400 hover:text-slate-800"
               }`}
               title="Lista"
             >
@@ -96,7 +96,7 @@ export default function AreaPaineisView({ paineis }: { paineis: Relatorio[] }) {
               <div className="h-10 w-10 rounded-xl bg-sky-500/15 text-sky-300 flex items-center justify-center">
                 <BarChart3 className="h-5 w-5" />
               </div>
-              <h2 className="mt-4 font-semibold text-slate-100">{p.nome}</h2>
+              <h2 className="mt-4 font-semibold text-slate-800">{p.nome}</h2>
               {p.descricao && (
                 <p className="mt-1 text-sm text-slate-400 line-clamp-2">
                   {p.descricao}
@@ -110,18 +110,18 @@ export default function AreaPaineisView({ paineis }: { paineis: Relatorio[] }) {
           ))}
         </div>
       ) : (
-        <div className="rounded-2xl border border-slate-200 bg-white divide-y divide-slate-100 overflow-hidden">
+        <div className="rounded-2xl border border-slate-200 bg-white divide-y divide-slate-100 overflow-hidden stagger">
           {lista.map((p) => (
             <Link
               key={p.id}
               href={`/relatorio/${p.id}`}
-              className="group flex items-center gap-3 px-4 py-3 hover:bg-white/5"
+              className="group flex items-center gap-3 px-4 py-3 hover:bg-sky-500/5 transition-colors"
             >
               <div className="h-9 w-9 shrink-0 rounded-lg bg-sky-500/15 text-sky-300 flex items-center justify-center">
                 <BarChart3 className="h-[18px] w-[18px]" />
               </div>
               <div className="min-w-0 flex-1">
-                <div className="font-medium text-slate-100 truncate">
+                <div className="font-medium text-slate-800 truncate">
                   {p.nome}
                 </div>
                 {p.descricao && (

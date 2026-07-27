@@ -117,7 +117,7 @@ export default function PaineisManager({
               </button>
               <button
                 onClick={() => setEditando(p.id)}
-                className="text-slate-300 hover:text-brand-600 press"
+                className="text-slate-500 hover:text-brand-600 press"
                 title="Editar painel"
               >
                 <Pencil className="h-4 w-4" />
@@ -131,7 +131,7 @@ export default function PaineisManager({
                       toast("Painel removido");
                     });
                 }}
-                className="text-slate-300 hover:text-red-400 press"
+                className="text-slate-500 hover:text-red-400 press"
                 title="Remover painel"
               >
                 <Trash2 className="h-4 w-4" />
