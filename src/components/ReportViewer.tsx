@@ -116,10 +116,11 @@ export default function ReportViewer({ relatorioId }: { relatorioId: string }) {
               filters: { visible: false },
               pageNavigation: { visible: true },
             },
-            background: models.BackgroundType.Transparent,
+            // Mostra o relatório com o fundo/wallpaper original (layout completo).
+            background: models.BackgroundType.Default,
           },
         }}
-        cssClassName="w-full h-[78vh]"
+        cssClassName="w-full h-[82vh]"
       />
     </div>
   );

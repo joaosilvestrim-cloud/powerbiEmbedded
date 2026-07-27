@@ -107,9 +107,12 @@ export async function importarPainel(
   reportId: string
 ) {
   const supabase = await assertAdmin();
+  // Bloqueia só se o MESMO relatório já estiver NESTA área (o mesmo
+  // relatório pode ser usado em áreas diferentes).
   const { data: existe } = await supabase
     .from("relatorios")
     .select("id")
+    .eq("area_id", areaId)
     .eq("pbi_workspace_id", workspaceId)
     .eq("pbi_report_id", reportId)
     .maybeSingle();
