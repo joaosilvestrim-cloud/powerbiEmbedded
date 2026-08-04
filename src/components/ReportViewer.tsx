@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { PowerBIEmbed } from "powerbi-client-react";
 import { models } from "powerbi-client";
-import { Maximize2, RefreshCw, AlertTriangle } from "lucide-react";
+import { Maximize2, RefreshCw, AlertTriangle, ShieldAlert } from "lucide-react";
 import type { EmbedConfig } from "@/lib/types";
 
 interface Estado {
@@ -12,7 +12,13 @@ interface Estado {
   erro?: string;
 }
 
-export default function ReportViewer({ relatorioId }: { relatorioId: string }) {
+export default function ReportViewer({
+  relatorioId,
+  avisoSemIdentidade,
+}: {
+  relatorioId: string;
+  avisoSemIdentidade?: boolean;
+}) {
   const [tentativa, setTentativa] = useState(0);
   const [estado, setEstado] = useState<Estado>({ key: "" });
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -84,10 +90,21 @@ export default function ReportViewer({ relatorioId }: { relatorioId: string }) {
   }
 
   return (
-    <div
-      ref={wrapRef}
-      className="rounded-2xl border border-slate-200 bg-white overflow-hidden"
-    >
+    <div className="space-y-3">
+      {avisoSemIdentidade && (
+        <div className="flex items-start gap-2 rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 text-sm text-amber-300">
+          <ShieldAlert className="h-4 w-4 mt-0.5 shrink-0" />
+          <span>
+            Este painel aplica <b>RLS</b> e seu usuário está{" "}
+            <b>sem Identidade RLS</b>. Os dados podem aparecer vazios — peça ao
+            administrador para definir sua identidade.
+          </span>
+        </div>
+      )}
+      <div
+        ref={wrapRef}
+        className="rounded-2xl border border-slate-200 bg-white overflow-hidden"
+      >
       <div className="flex items-center justify-end gap-2 border-b border-slate-100 px-3 py-2">
         <button
           onClick={() => setTentativa((t) => t + 1)}
@@ -122,6 +139,7 @@ export default function ReportViewer({ relatorioId }: { relatorioId: string }) {
         }}
         cssClassName="w-full h-[82vh]"
       />
+      </div>
     </div>
   );
 }

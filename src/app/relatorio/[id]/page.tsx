@@ -71,7 +71,12 @@ export default async function RelatorioPage({
       {relatorio.embed_url ? (
         <IframeViewer embedUrl={relatorio.embed_url} titulo={relatorio.nome} />
       ) : (
-        <ReportViewer relatorioId={relatorio.id} />
+        <ReportViewer
+          relatorioId={relatorio.id}
+          avisoSemIdentidade={
+            Boolean(relatorio.rls_role) && !profile.rls_identity
+          }
+        />
       )}
     </AppShell>
   );

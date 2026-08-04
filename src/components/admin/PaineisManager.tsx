@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Plus, Trash2, Info, Link2, Pencil } from "lucide-react";
+import { Plus, Trash2, Info, Link2, Pencil, ShieldCheck } from "lucide-react";
 import {
   criarPainelLink,
   atualizarPainel,
@@ -87,8 +87,18 @@ export default function PaineisManager({
           ) : (
             <div key={p.id} className="flex items-center gap-3 px-4 py-3">
               <div className="min-w-0 flex-1">
-                <div className="font-medium text-slate-800 truncate">
-                  {p.nome}
+                <div className="flex items-center gap-2">
+                  <span className="font-medium text-slate-800 truncate">
+                    {p.nome}
+                  </span>
+                  {p.rls_role && (
+                    <span
+                      className="inline-flex items-center gap-1 rounded-full bg-violet-500/15 text-violet-300 px-2 py-0.5 text-[11px] font-medium shrink-0"
+                      title={`RLS: ${p.rls_role}`}
+                    >
+                      <ShieldCheck className="h-3 w-3" /> RLS
+                    </span>
+                  )}
                 </div>
                 <div className="text-xs text-slate-400 truncate">
                   {p.embed_url ? (
