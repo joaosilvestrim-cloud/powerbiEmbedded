@@ -13,8 +13,9 @@ export interface Tenant {
   ativo: boolean;
 }
 
-// Domínio raiz dos subdomínios de clientes (ex.: clienteA.embeddedbi.drivedata.com.br)
-const ROOT = "embeddedbi.drivedata.com.br";
+// Domínio raiz dos subdomínios de clientes (ex.: clienteA.drivedata.com.br).
+// Configurável por env; o padrão é o domínio da DriveData.
+const ROOT = process.env.NEXT_PUBLIC_TENANT_ROOT || "drivedata.com.br";
 
 // Tenant padrão usado quando a tabela ainda não existe (antes da migração)
 // ou quando o host não casa com nenhum cliente.
