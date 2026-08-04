@@ -12,7 +12,11 @@ function LoginForm() {
 
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const [erro, setErro] = useState<string | null>(null);
+  const [erro, setErro] = useState<string | null>(
+    params.get("erro") === "dominio"
+      ? "Sua conta não pertence a este endereço. Use o link do seu portal."
+      : null
+  );
   const [carregando, setCarregando] = useState(false);
 
   async function entrar(e: React.FormEvent) {

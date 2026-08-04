@@ -8,6 +8,7 @@ export interface Profile {
   ativo: boolean;
   rls_identity: string | null;
   tenant_id: string | null;
+  super_admin: boolean;
   criado_em: string;
 }
 

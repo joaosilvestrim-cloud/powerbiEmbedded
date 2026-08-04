@@ -7,9 +7,13 @@ import { useState } from "react";
 export default function BrandLogo({
   size = 32,
   className = "",
+  src = "/Logo.png",
+  alt = "DriveData",
 }: {
   size?: number;
   className?: string;
+  src?: string;
+  alt?: string;
 }) {
   const [semImg, setSemImg] = useState(false);
 
@@ -17,8 +21,8 @@ export default function BrandLogo({
     return (
       // eslint-disable-next-line @next/next/no-img-element
       <img
-        src="/Logo.png"
-        alt="DriveData"
+        src={src || "/Logo.png"}
+        alt={alt}
         width={size}
         height={size}
         className={className}

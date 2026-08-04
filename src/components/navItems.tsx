@@ -8,6 +8,7 @@ import {
   FolderKanban,
   Users,
   PlugZap,
+  Building2,
   type LucideIcon,
 } from "lucide-react";
 
@@ -27,6 +28,10 @@ export const adminItens: NavItem[] = [
   { href: "/admin/areas", label: "Áreas", icon: FolderKanban },
   { href: "/admin/usuarios", label: "Usuários", icon: Users },
   { href: "/admin/powerbi", label: "Power BI", icon: PlugZap },
+];
+
+export const superItens: NavItem[] = [
+  { href: "/super", label: "Clientes", icon: Building2, exact: true },
 ];
 
 function LinkItem({
@@ -65,9 +70,11 @@ function LinkItem({
 
 export function NavLinks({
   isAdmin,
+  isSuper,
   onNavigate,
 }: {
   isAdmin: boolean;
+  isSuper?: boolean;
   onNavigate?: () => void;
 }) {
   const pathname = usePathname();
@@ -90,6 +97,21 @@ export function NavLinks({
             Administração
           </p>
           {adminItens.map((i) => (
+            <LinkItem
+              key={i.href}
+              item={i}
+              active={isActive(i)}
+              onNavigate={onNavigate}
+            />
+          ))}
+        </>
+      )}
+      {isSuper && (
+        <>
+          <p className="px-3 pt-5 pb-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
+            Plataforma
+          </p>
+          {superItens.map((i) => (
             <LinkItem
               key={i.href}
               item={i}

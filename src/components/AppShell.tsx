@@ -5,6 +5,7 @@ import Sidebar from "@/components/Sidebar";
 import MobileNav from "@/components/MobileNav";
 import UserMenu from "@/components/UserMenu";
 import ThemeToggle from "@/components/ThemeToggle";
+import { getTenant } from "@/lib/tenant";
 import type { Profile } from "@/lib/types";
 
 export interface Crumb {
@@ -12,7 +13,7 @@ export interface Crumb {
   href?: string;
 }
 
-export default function AppShell({
+export default async function AppShell({
   profile,
   title,
   subtitle,
@@ -27,14 +28,25 @@ export default function AppShell({
   actions?: ReactNode;
   children: ReactNode;
 }) {
+  const tenant = await getTenant();
   return (
     <div className="flex min-h-screen app-bg">
-      <Sidebar isAdmin={profile.role === "admin"} />
+      <Sidebar
+        isAdmin={profile.role === "admin"}
+        isSuper={profile.super_admin}
+        marcaNome={tenant.nome}
+        logoUrl={tenant.logo_url}
+      />
 
       <div className="flex-1 flex flex-col min-w-0">
         <header className="h-16 shrink-0 bg-white/70 backdrop-blur border-b border-slate-200 flex items-center justify-between px-3 sm:px-6 gap-2">
           <div className="flex items-center gap-2 min-w-0">
-            <MobileNav isAdmin={profile.role === "admin"} />
+            <MobileNav
+              isAdmin={profile.role === "admin"}
+              isSuper={profile.super_admin}
+              marcaNome={tenant.nome}
+              logoUrl={tenant.logo_url}
+            />
             <div className="min-w-0">
               {breadcrumb && breadcrumb.length > 0 && (
                 <nav className="flex items-center gap-1 text-xs text-slate-400 mb-0.5">

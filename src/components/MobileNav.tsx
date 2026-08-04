@@ -5,7 +5,17 @@ import { Menu, X } from "lucide-react";
 import BrandLogo from "@/components/BrandLogo";
 import { NavLinks } from "@/components/navItems";
 
-export default function MobileNav({ isAdmin }: { isAdmin: boolean }) {
+export default function MobileNav({
+  isAdmin,
+  isSuper,
+  marcaNome = "DriveData",
+  logoUrl,
+}: {
+  isAdmin: boolean;
+  isSuper?: boolean;
+  marcaNome?: string;
+  logoUrl?: string | null;
+}) {
   const [aberto, setAberto] = useState(false);
 
   return (
@@ -27,9 +37,13 @@ export default function MobileNav({ isAdmin }: { isAdmin: boolean }) {
           <aside className="absolute left-0 top-0 h-full w-64 bg-white shadow-xl flex flex-col animate-slide-in">
             <div className="h-16 flex items-center justify-between px-4 border-b border-slate-200">
               <div className="flex items-center gap-2.5">
-                <BrandLogo size={28} />
-                <span className="font-semibold text-slate-800">
-                  DriveData BI
+                <BrandLogo
+                  size={28}
+                  src={logoUrl || "/Logo.png"}
+                  alt={marcaNome}
+                />
+                <span className="font-semibold text-slate-800 truncate">
+                  {marcaNome}
                 </span>
               </div>
               <button
@@ -41,7 +55,11 @@ export default function MobileNav({ isAdmin }: { isAdmin: boolean }) {
               </button>
             </div>
             <nav className="flex-1 overflow-y-auto p-3 space-y-1">
-              <NavLinks isAdmin={isAdmin} onNavigate={() => setAberto(false)} />
+              <NavLinks
+                isAdmin={isAdmin}
+                isSuper={isSuper}
+                onNavigate={() => setAberto(false)}
+              />
             </nav>
           </aside>
         </div>
