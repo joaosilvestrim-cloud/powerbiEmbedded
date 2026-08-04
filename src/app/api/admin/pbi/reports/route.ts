@@ -1,14 +1,15 @@
 import { NextResponse } from "next/server";
-import { ensureAdmin, loadPbiCred } from "@/lib/pbi-config";
+import { adminTenant, loadPbiCred } from "@/lib/pbi-config";
 import { listReports } from "@/lib/powerbi";
 
 // POST /api/admin/pbi/reports  { workspaceId }
 // Lista os relatórios de um workspace.
 export async function POST(request: Request) {
-  if (!(await ensureAdmin()))
+  const tenantId = await adminTenant();
+  if (!tenantId)
     return NextResponse.json({ error: "Acesso negado" }, { status: 403 });
 
-  const cred = await loadPbiCred();
+  const cred = await loadPbiCred(tenantId);
   if (!cred)
     return NextResponse.json({ error: "Power BI não configurado" }, { status: 400 });
 

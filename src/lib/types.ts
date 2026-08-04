@@ -7,6 +7,7 @@ export interface Profile {
   role: Role;
   ativo: boolean;
   rls_identity: string | null;
+  tenant_id: string | null;
   criado_em: string;
 }
 

@@ -1,14 +1,15 @@
 import { NextResponse } from "next/server";
-import { ensureAdmin, loadPbiCred } from "@/lib/pbi-config";
+import { adminTenant, loadPbiCred } from "@/lib/pbi-config";
 import { listWorkspaces } from "@/lib/powerbi";
 
 // POST /api/admin/pbi/test
 // Testa a conexão do service principal e retorna os workspaces visíveis.
 export async function POST() {
-  if (!(await ensureAdmin()))
+  const tenantId = await adminTenant();
+  if (!tenantId)
     return NextResponse.json({ error: "Acesso negado" }, { status: 403 });
 
-  const cred = await loadPbiCred();
+  const cred = await loadPbiCred(tenantId);
   if (!cred)
     return NextResponse.json(
       { ok: false, error: "Credenciais ainda não preenchidas." },

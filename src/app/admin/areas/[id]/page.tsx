@@ -29,9 +29,9 @@ export default async function AreaDetalhePage({
     supabase.from("relatorios").select("*").eq("area_id", id).order("nome"),
     createAdminClient()
       .from("config_powerbi")
-      .select("tenant_id, client_id, client_secret")
-      .eq("id", true)
-      .single(),
+      .select("pbi_tenant_id, client_id, client_secret")
+      .eq("tenant_id", profile.tenant_id)
+      .maybeSingle(),
     supabase.from("profiles").select("*").order("nome"),
     supabase.from("permissoes_area").select("user_id").eq("area_id", id),
   ]);
@@ -46,7 +46,7 @@ export default async function AreaDetalhePage({
   const temRls = paineisLista.some((p) => p.rls_role);
 
   const configurado = Boolean(
-    cfg?.tenant_id && cfg?.client_id && cfg?.client_secret
+    cfg?.pbi_tenant_id && cfg?.client_id && cfg?.client_secret
   );
 
   return (

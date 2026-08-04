@@ -24,15 +24,15 @@ export default async function AdminOverviewPage() {
       supabase.from("relatorios").select("id, ativo"),
       admin
         .from("config_powerbi")
-        .select("tenant_id, client_id, client_secret")
-        .eq("id", true)
-        .single(),
+        .select("pbi_tenant_id, client_id, client_secret")
+        .eq("tenant_id", profile.tenant_id)
+        .maybeSingle(),
     ]);
 
   const totalRel = relatorios?.length ?? 0;
   const ativos = relatorios?.filter((r) => r.ativo).length ?? 0;
   const pbiOk = Boolean(
-    cfg?.tenant_id && cfg?.client_id && cfg?.client_secret
+    cfg?.pbi_tenant_id && cfg?.client_id && cfg?.client_secret
   );
 
   const cards = [

@@ -12,12 +12,12 @@ export default async function AdminPowerBIPage() {
 
   const { data: cfg } = await createAdminClient()
     .from("config_powerbi")
-    .select("tenant_id, client_id, client_secret")
-    .eq("id", true)
-    .single();
+    .select("pbi_tenant_id, client_id, client_secret")
+    .eq("tenant_id", profile.tenant_id)
+    .maybeSingle();
 
   const configurado = Boolean(
-    cfg?.tenant_id && cfg?.client_id && cfg?.client_secret
+    cfg?.pbi_tenant_id && cfg?.client_id && cfg?.client_secret
   );
 
   return (
@@ -54,7 +54,7 @@ export default async function AdminPowerBIPage() {
               1. Credenciais do service principal
             </h3>
             <ConfigPowerBI
-              tenantId={cfg?.tenant_id ?? ""}
+              tenantId={cfg?.pbi_tenant_id ?? ""}
               clientId={cfg?.client_id ?? ""}
               secretDefinido={Boolean(cfg?.client_secret)}
             />

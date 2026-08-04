@@ -23,7 +23,21 @@ insert into public.tenants (nome, slug, dominio, cor_primaria, cor_secundaria)
 values ('DriveData', 'app', 'embeddedbi.drivedata.com.br', '#0284c7', '#22c55e')
 on conflict (slug) do nothing;
 
--- ---------- tenant_id nas tabelas ----------
+-- IMPORTANTE: config_powerbi.tenant_id hoje é o TENANT DO AZURE (Power BI).
+-- Renomeamos para pbi_tenant_id para liberar o nome tenant_id (multi-tenant).
+do $$
+begin
+  if exists (
+    select 1 from information_schema.columns
+    where table_schema='public' and table_name='config_powerbi'
+      and column_name='tenant_id'
+      and data_type <> 'uuid'
+  ) then
+    alter table public.config_powerbi rename column tenant_id to pbi_tenant_id;
+  end if;
+end $$;
+
+-- ---------- tenant_id (multi-tenant) nas tabelas ----------
 alter table public.profiles        add column if not exists tenant_id uuid references public.tenants (id) on delete cascade;
 alter table public.areas           add column if not exists tenant_id uuid references public.tenants (id) on delete cascade;
 alter table public.relatorios      add column if not exists tenant_id uuid references public.tenants (id) on delete cascade;
@@ -45,7 +59,22 @@ begin
   update public.config_powerbi  set tenant_id = t where tenant_id is null;
 end $$;
 
--- config_powerbi passa a ser 1 por tenant (mantém a linha atual funcionando).
+-- config_powerbi passa a ser 1 por tenant. Removemos a trava de linha
+-- única (id boolean = true) e a chave passa a ser tenant_id.
+do $$
+declare c text;
+begin
+  alter table public.config_powerbi drop constraint if exists config_powerbi_pkey;
+  for c in
+    select conname from pg_constraint
+    where conrelid = 'public.config_powerbi'::regclass and contype = 'c'
+  loop
+    execute 'alter table public.config_powerbi drop constraint ' || quote_ident(c);
+  end loop;
+  begin alter table public.config_powerbi alter column id drop not null; exception when others then null; end;
+  begin alter table public.config_powerbi alter column id drop default; exception when others then null; end;
+end $$;
+
 create unique index if not exists config_powerbi_tenant_uk
   on public.config_powerbi (tenant_id);
 
