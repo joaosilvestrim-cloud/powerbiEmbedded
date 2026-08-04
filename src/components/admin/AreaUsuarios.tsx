@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
-import { Users } from "lucide-react";
+import { Users, ShieldAlert } from "lucide-react";
 import { definirPermissaoArea } from "@/app/admin/actions";
 import { useToast } from "@/components/Toast";
 import SearchInput from "@/components/SearchInput";
@@ -12,15 +12,31 @@ export default function AreaUsuarios({
   areaId,
   usuarios,
   comAcesso,
+  temRls = false,
 }: {
   areaId: string;
   usuarios: Profile[];
   comAcesso: string[];
+  temRls?: boolean;
 }) {
   const toast = useToast();
   const [pending, startTransition] = useTransition();
   const [q, setQ] = useState("");
   const acessoSet = useMemo(() => new Set(comAcesso), [comAcesso]);
+
+  function conceder(u: Profile, marcou: boolean) {
+    startTransition(async () => {
+      await definirPermissaoArea(u.id, areaId, marcou);
+      if (marcou && temRls && !u.rls_identity) {
+        toast(
+          "Acesso dado, mas sem Identidade RLS o usuário verá vazio",
+          "erro"
+        );
+      } else {
+        toast(marcou ? "Acesso concedido" : "Acesso removido");
+      }
+    });
+  }
 
   const termo = q.trim().toLowerCase();
   const filtrados = termo
@@ -32,13 +48,6 @@ export default function AreaUsuarios({
     : usuarios;
 
   const naoAdmins = filtrados.filter((u) => u.role !== "admin");
-
-  function toggle(userId: string, conceder: boolean) {
-    startTransition(async () => {
-      await definirPermissaoArea(userId, areaId, conceder);
-      toast(conceder ? "Acesso concedido" : "Acesso removido");
-    });
-  }
 
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-4 space-y-3">
@@ -52,9 +61,19 @@ export default function AreaUsuarios({
 
       <SearchInput value={q} onChange={setQ} placeholder="Buscar usuário…" />
 
-      <div className="text-xs text-slate-400">
-        Administradores veem todas as áreas automaticamente.
-      </div>
+      {temRls ? (
+        <div className="flex items-start gap-2 rounded-lg bg-violet-500/[0.08] border border-violet-500/25 p-2.5 text-xs text-slate-600">
+          <ShieldAlert className="h-4 w-4 shrink-0 mt-0.5 text-violet-300" />
+          <span>
+            Esta área tem painel com <b>RLS</b>. Cada usuário precisa de{" "}
+            <b>Identidade RLS</b> (em Usuários), senão verá o painel vazio.
+          </span>
+        </div>
+      ) : (
+        <div className="text-xs text-slate-400">
+          Administradores veem todas as áreas automaticamente.
+        </div>
+      )}
 
       <div className="max-h-80 overflow-y-auto divide-y divide-slate-100 rounded-lg border border-slate-100">
         {naoAdmins.length === 0 && (
@@ -71,7 +90,7 @@ export default function AreaUsuarios({
               type="checkbox"
               checked={acessoSet.has(u.id)}
               disabled={pending}
-              onChange={(e) => toggle(u.id, e.target.checked)}
+              onChange={(e) => conceder(u, e.target.checked)}
               className="h-4 w-4 rounded border-slate-300 text-brand-600"
             />
             <div className="min-w-0 flex-1">
@@ -82,6 +101,14 @@ export default function AreaUsuarios({
                 <div className="text-xs text-slate-400 truncate">{u.email}</div>
               )}
             </div>
+            {temRls && !u.rls_identity && (
+              <span
+                title="Sem Identidade RLS — verá vazio"
+                className="inline-flex items-center gap-1 text-[10px] text-amber-300"
+              >
+                <ShieldAlert className="h-3 w-3" /> sem id.
+              </span>
+            )}
             {!u.ativo && (
               <span className="text-[11px] text-slate-400">inativo</span>
             )}

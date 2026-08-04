@@ -4,6 +4,7 @@ import { useMemo, useState, useTransition } from "react";
 import {
   Plus,
   ShieldCheck,
+  ShieldAlert,
   SlidersHorizontal,
   ChevronDown,
   MoreVertical,
@@ -36,11 +37,14 @@ export default function UsuariosManager({
   usuarios,
   areas,
   permissoes,
+  areasComRls = [],
 }: {
   usuarios: Profile[];
   areas: Area[];
   permissoes: PermissaoArea[];
+  areasComRls?: string[];
 }) {
+  const rlsSet = useMemo(() => new Set(areasComRls), [areasComRls]);
   const toast = useToast();
   const [pending, startTransition] = useTransition();
   const [aberto, setAberto] = useState(false);
@@ -258,6 +262,12 @@ export default function UsuariosManager({
           const isAdmin = u.role === "admin";
           const liberadas = permsPorUser.get(u.id) ?? new Set<string>();
           const exp = expandido === u.id;
+          // Precisa de identidade RLS: usuário comum, sem identidade, com
+          // acesso a alguma área que tem painel com RLS.
+          const precisaRls =
+            !isAdmin &&
+            !u.rls_identity &&
+            [...liberadas].some((id) => rlsSet.has(id));
           return (
             <div key={u.id} className={u.ativo ? "" : "bg-slate-50/60"}>
               <div className="flex items-center gap-3 px-4 py-3">
@@ -279,6 +289,15 @@ export default function UsuariosManager({
                       <span className="rounded-full bg-slate-200 text-slate-500 px-2 py-0.5 text-[11px]">
                         inativo
                       </span>
+                    )}
+                    {precisaRls && (
+                      <button
+                        onClick={() => setExpandido(u.id)}
+                        title="Este usuário tem acesso a painel com RLS mas está sem Identidade RLS"
+                        className="inline-flex items-center gap-1 rounded-full bg-amber-500/15 text-amber-300 px-2 py-0.5 text-[11px] font-medium"
+                      >
+                        <ShieldAlert className="h-3 w-3" /> sem identidade RLS
+                      </button>
                     )}
                   </div>
                   <div className="text-xs text-slate-400 truncate">
@@ -441,16 +460,20 @@ export default function UsuariosManager({
                               disabled={pending}
                               onChange={(e) =>
                                 startTransition(async () => {
-                                  await definirPermissaoArea(
-                                    u.id,
-                                    a.id,
-                                    e.target.checked
-                                  );
-                                  toast(
-                                    e.target.checked
-                                      ? "Área liberada"
-                                      : "Acesso removido"
-                                  );
+                                  const marcou = e.target.checked;
+                                  await definirPermissaoArea(u.id, a.id, marcou);
+                                  if (
+                                    marcou &&
+                                    rlsSet.has(a.id) &&
+                                    !u.rls_identity
+                                  ) {
+                                    toast(
+                                      "Área liberada, mas sem Identidade RLS o usuário verá vazio",
+                                      "erro"
+                                    );
+                                  } else {
+                                    toast(marcou ? "Área liberada" : "Acesso removido");
+                                  }
                                 })
                               }
                               className="h-4 w-4 rounded border-slate-300 text-brand-600"
@@ -459,6 +482,14 @@ export default function UsuariosManager({
                             <span className="text-sm text-slate-700">
                               {a.nome}
                             </span>
+                            {rlsSet.has(a.id) && (
+                              <span
+                                title="Área com painel que usa RLS"
+                                className="inline-flex items-center gap-1 text-[10px] text-violet-300"
+                              >
+                                <ShieldCheck className="h-3 w-3" /> RLS
+                              </span>
+                            )}
                           </label>
                         );
                       })}

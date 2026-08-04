@@ -42,6 +42,9 @@ export default async function AreaDetalhePage({
     (p) => p.user_id
   );
 
+  const paineisLista = (paineis ?? []) as Relatorio[];
+  const temRls = paineisLista.some((p) => p.rls_role);
+
   const configurado = Boolean(
     cfg?.tenant_id && cfg?.client_id && cfg?.client_secret
   );
@@ -69,10 +72,7 @@ export default async function AreaDetalhePage({
             <h3 className="text-sm font-semibold text-slate-700 mb-2">
               Painéis da área
             </h3>
-            <PaineisManager
-              areaId={id}
-              paineis={(paineis ?? []) as Relatorio[]}
-            />
+            <PaineisManager areaId={id} paineis={paineisLista} />
           </div>
 
           <div>
@@ -83,6 +83,7 @@ export default async function AreaDetalhePage({
               areaId={id}
               usuarios={(usuarios ?? []) as Profile[]}
               comAcesso={comAcesso}
+              temRls={temRls}
             />
           </div>
         </div>
