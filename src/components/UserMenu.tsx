@@ -38,7 +38,7 @@ export default function UserMenu({ profile }: { profile: Profile }) {
       </button>
 
       {aberto && (
-        <div className="absolute right-0 mt-2 w-60 rounded-xl border border-slate-200 bg-white shadow-lg p-2 z-20 origin-top-right animate-scale-in">
+        <div className="absolute right-0 mt-2 w-60 rounded-xl border border-slate-200 bg-white shadow-lg p-2 z-50 origin-top-right animate-scale-in">
           <div className="px-3 py-2">
             <p className="text-sm font-medium text-slate-800 truncate">
               {profile.nome || "—"}
