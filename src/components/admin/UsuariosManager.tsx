@@ -232,6 +232,23 @@ export default function UsuariosManager({
               className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
             />
           </label>
+          <label className="text-sm sm:col-span-3">
+            <span className="block text-slate-700 mb-1">
+              Identidade RLS{" "}
+              <span className="text-slate-400 font-normal">
+                (opcional — obrigatória se o usuário vai ver painel com RLS)
+              </span>
+            </span>
+            <input
+              name="rls_identity"
+              placeholder="Ex.: código/CNPJ do cliente — igual ao valor no modelo do Power BI"
+              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm font-mono"
+            />
+            <span className="mt-1 block text-xs text-slate-400">
+              É o valor que a Microsoft usa para filtrar os dados. Sem ele, um
+              painel com RLS aparece vazio. Você também pode definir depois.
+            </span>
+          </label>
           {erro && <p className="sm:col-span-3 text-sm text-red-400">{erro}</p>}
           <div className="sm:col-span-3 flex gap-2">
             <button

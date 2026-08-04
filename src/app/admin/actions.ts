@@ -252,6 +252,7 @@ export async function criarUsuario(formData: FormData) {
   const email = String(formData.get("email") || "").trim();
   const nome = String(formData.get("nome") || "").trim();
   const senha = String(formData.get("senha") || "").trim();
+  const rlsIdentity = String(formData.get("rls_identity") || "").trim();
 
   const { error } = await admin.auth.admin.createUser({
     email,
@@ -261,7 +262,11 @@ export async function criarUsuario(formData: FormData) {
   });
   if (error) throw new Error(error.message);
 
-  await admin.from("profiles").update({ nome, email }).eq("email", email);
+  // Já grava a Identidade RLS na criação (garante o filtro correto no Power BI).
+  await admin
+    .from("profiles")
+    .update({ nome, email, rls_identity: rlsIdentity || null })
+    .eq("email", email);
   revalidatePath("/admin/usuarios");
 }
 
