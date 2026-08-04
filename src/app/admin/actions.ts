@@ -296,8 +296,9 @@ export async function salvarConfigPowerBI(formData: FormData) {
   const client_secret = String(formData.get("client_secret") || "").trim();
 
   const payload: Record<string, unknown> = {
-    tenant_id: tenantId,
-    pbi_tenant_id,
+    org_id: tenantId, // chave multi-tenant
+    tenant_id: pbi_tenant_id, // compat: a main antiga ainda lê a coluna antiga (Azure)
+    pbi_tenant_id, // novo nome do Tenant do Azure
     client_id,
     atualizado_em: new Date().toISOString(),
   };
@@ -306,7 +307,7 @@ export async function salvarConfigPowerBI(formData: FormData) {
   // Uma config por tenant (upsert).
   const { data: existente } = await admin
     .from("config_powerbi")
-    .select("tenant_id")
+    .select("org_id")
     .eq("org_id", tenantId)
     .maybeSingle();
   if (existente) {
