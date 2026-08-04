@@ -66,7 +66,7 @@ export async function POST(request: Request) {
   const { data: cfg } = await admin
     .from("config_powerbi")
     .select("pbi_tenant_id, client_id, client_secret")
-    .eq("tenant_id", relatorio.tenant_id)
+    .eq("org_id", relatorio.tenant_id)
     .maybeSingle();
 
   if (!cfg || !cfg.pbi_tenant_id || !cfg.client_id || !cfg.client_secret) {

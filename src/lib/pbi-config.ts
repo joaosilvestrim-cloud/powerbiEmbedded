@@ -28,7 +28,7 @@ export async function loadPbiCred(
   const { data } = await admin
     .from("config_powerbi")
     .select("pbi_tenant_id, client_id, client_secret")
-    .eq("tenant_id", tenantId)
+    .eq("org_id", tenantId)
     .maybeSingle();
   if (!data?.pbi_tenant_id || !data?.client_id || !data?.client_secret)
     return null;

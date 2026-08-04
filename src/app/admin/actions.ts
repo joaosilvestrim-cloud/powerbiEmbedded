@@ -307,10 +307,10 @@ export async function salvarConfigPowerBI(formData: FormData) {
   const { data: existente } = await admin
     .from("config_powerbi")
     .select("tenant_id")
-    .eq("tenant_id", tenantId)
+    .eq("org_id", tenantId)
     .maybeSingle();
   if (existente) {
-    await admin.from("config_powerbi").update(payload).eq("tenant_id", tenantId);
+    await admin.from("config_powerbi").update(payload).eq("org_id", tenantId);
   } else {
     await admin.from("config_powerbi").insert(payload);
   }

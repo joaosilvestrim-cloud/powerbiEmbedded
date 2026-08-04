@@ -13,7 +13,7 @@ export default async function AdminPowerBIPage() {
   const { data: cfg } = await createAdminClient()
     .from("config_powerbi")
     .select("pbi_tenant_id, client_id, client_secret")
-    .eq("tenant_id", profile.tenant_id)
+    .eq("org_id", profile.tenant_id)
     .maybeSingle();
 
   const configurado = Boolean(

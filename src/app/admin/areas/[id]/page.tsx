@@ -30,7 +30,7 @@ export default async function AreaDetalhePage({
     createAdminClient()
       .from("config_powerbi")
       .select("pbi_tenant_id, client_id, client_secret")
-      .eq("tenant_id", profile.tenant_id)
+      .eq("org_id", profile.tenant_id)
       .maybeSingle(),
     supabase.from("profiles").select("*").order("nome"),
     supabase.from("permissoes_area").select("user_id").eq("area_id", id),
