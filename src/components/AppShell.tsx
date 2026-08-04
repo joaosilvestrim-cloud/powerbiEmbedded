@@ -4,6 +4,7 @@ import { ChevronRight } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
 import MobileNav from "@/components/MobileNav";
 import UserMenu from "@/components/UserMenu";
+import ThemeToggle from "@/components/ThemeToggle";
 import type { Profile } from "@/lib/types";
 
 export interface Crumb {
@@ -66,6 +67,7 @@ export default function AppShell({
           </div>
           <div className="flex items-center gap-2">
             {actions}
+            <ThemeToggle />
             <UserMenu profile={profile} />
           </div>
         </header>

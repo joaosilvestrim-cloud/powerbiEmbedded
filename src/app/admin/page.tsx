@@ -73,7 +73,7 @@ export default async function AdminOverviewPage() {
             <Link
               key={c.label}
               href={c.href}
-              className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 hover:border-white/20 card-lift press"
+              className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 hover:border-brand-400 card-lift press"
             >
               <div className="pointer-events-none absolute -top-12 -right-10 h-32 w-32 rounded-full bg-sky-500 opacity-[0.12] blur-3xl transition-opacity group-hover:opacity-25" />
               <div className="relative">

@@ -1,15 +1,49 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 /* ============================================================
-   DriveData — tema ESCURO (navy + vidro + gradiente verde→azul)
-   Estratégia: redefinimos a escala slate/white para tons escuros,
-   então todo o app herda o dark sem mexer em cada componente.
+   DriveData — tema CLARO (padrão) e ESCURO (classe .dark)
+   As cores neutras/marca são variáveis; a classe .dark troca os
+   valores, então todo o app alterna sem mexer em cada componente.
    ============================================================ */
 @theme {
-  /* superfície dos cards (bg-white) */
-  --color-white: #0f1c30;
+  /* marca — azul (tons para o tema claro; .dark ajusta alguns) */
+  --color-brand-50: #eff9ff;
+  --color-brand-100: #dcf1ff;
+  --color-brand-200: #b3e4ff;
+  --color-brand-300: #6fd0ff;
+  --color-brand-400: #38bdf8;
+  --color-brand-500: #0ea5e9;
+  --color-brand-600: #0284c7;
+  --color-brand-700: #0369a1;
+  --color-brand-800: #075985;
+  --color-brand-900: #0c4a6e;
 
-  /* escala slate invertida para dark */
+  --color-accent-400: #34d399;
+  --color-accent-500: #22c55e;
+  --color-accent-600: #16a34a;
+}
+
+/* ---------- TEMA CLARO (padrão) ---------- */
+:root {
+  color-scheme: light;
+  --app-page-1: #f4f7fb;
+  --app-page-2: #e9eff7;
+  --app-text: #0f172a;
+  --app-field-bg: #ffffff;
+  --sheen: rgba(15, 23, 42, 0.02);
+  /* tons "-300" de destaque escurecidos p/ leitura em fundo claro */
+  --color-sky-300: #0369a1;
+  --color-emerald-300: #047857;
+  --color-violet-300: #6d28d9;
+  --color-amber-300: #b45309;
+  --color-rose-300: #be123c;
+}
+
+/* ---------- TEMA ESCURO ---------- */
+.dark {
+  color-scheme: dark;
+  --color-white: #0f1c30;
   --color-slate-50: #0b1524;
   --color-slate-100: #14243a;
   --color-slate-200: #24374f;
@@ -21,40 +55,46 @@
   --color-slate-800: #e7edf6;
   --color-slate-900: #f3f7fc;
 
-  /* marca — azul (ponta azul do logo) */
   --color-brand-50: #0e2740;
   --color-brand-100: #123252;
-  --color-brand-200: #16436e;
-  --color-brand-300: #1f6fa8;
-  --color-brand-400: #2aa5e0;
-  --color-brand-500: #18b6f4;
   --color-brand-600: #1aa6e6;
   --color-brand-700: #2f7fbf;
-  --color-brand-800: #0e567f;
-  --color-brand-900: #114a6a;
 
-  --color-accent-400: #34d399;
-  --color-accent-500: #22c55e;
-  --color-accent-600: #16a34a;
+  --app-page-1: #0a1220;
+  --app-page-2: #080f1c;
+  --app-text: #e7edf6;
+  --app-field-bg: rgba(255, 255, 255, 0.04);
+  --sheen: rgba(255, 255, 255, 0.06);
+  /* tons "-300" de destaque brilhantes (padrão Tailwind) */
+  --color-sky-300: #7dd3fc;
+  --color-emerald-300: #6ee7b7;
+  --color-violet-300: #c4b5fd;
+  --color-amber-300: #fcd34d;
+  --color-rose-300: #fda4af;
 }
 
 /* Gradiente da marca (logo, botões, faixas) */
 .bg-brand-gradient {
   background-image: linear-gradient(120deg, #3ddc84 0%, #14c1c9 48%, #1a86e6 100%);
-  box-shadow: 0 8px 24px -10px rgba(26, 134, 230, 0.55);
+  box-shadow: 0 8px 24px -10px rgba(26, 134, 230, 0.5);
 }
 .text-brand-gradient {
+  background: linear-gradient(120deg, #16a34a 0%, #14a5b8 45%, #0284c7 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.dark .text-brand-gradient {
   background: linear-gradient(120deg, #5be59a 0%, #35c9d6 45%, #4aa6ff 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
-/* Fundo do app: navy profundo + aurora animada + grade sutil */
+/* Fundo do app: gradiente + aurora animada */
 .app-bg {
   position: relative;
-  background-color: #080f1c;
-  background-image: linear-gradient(180deg, #0a1220 0%, #080f1c 100%);
+  background-image: linear-gradient(180deg, var(--app-page-1) 0%, var(--app-page-2) 100%);
   isolation: isolate;
 }
 .app-bg::before {
@@ -64,9 +104,9 @@
   z-index: -1;
   pointer-events: none;
   background-image:
-    radial-gradient(45rem 35rem at 80% -10%, rgba(26, 134, 230, 0.22), transparent 60%),
-    radial-gradient(40rem 32rem at 0% 108%, rgba(61, 220, 132, 0.16), transparent 58%),
-    radial-gradient(38rem 30rem at 55% 55%, rgba(20, 193, 201, 0.1), transparent 60%);
+    radial-gradient(45rem 35rem at 80% -10%, rgba(26, 134, 230, 0.18), transparent 60%),
+    radial-gradient(40rem 32rem at 0% 108%, rgba(61, 220, 132, 0.14), transparent 58%),
+    radial-gradient(38rem 30rem at 55% 55%, rgba(20, 193, 201, 0.08), transparent 60%);
   animation: aurora 18s ease-in-out infinite alternate;
 }
 @keyframes aurora {
@@ -74,38 +114,22 @@
   50% { transform: translate3d(2%, 1.5%, 0) scale(1.08); opacity: 1; }
   100% { transform: translate3d(-1%, 2%, 0) scale(1.03); opacity: 0.92; }
 }
-.grid-pattern {
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
-  background-size: 40px 40px;
-}
-/* Vidro (glass) para superfícies elevadas */
-.glass {
-  background: rgba(17, 30, 51, 0.6);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
 
-html {
-  /* faz inputs, selects, scrollbars e checkboxes nativos ficarem escuros */
-  color-scheme: dark;
-}
 body {
   font-family: var(--font-sora), var(--font-geist-sans), system-ui, sans-serif;
-  color: #e7edf6;
+  color: var(--app-text);
 }
 
-/* Campos de formulário no tema escuro */
+/* Campos de formulário (seguem o tema) */
 input,
 textarea,
 select {
-  background-color: rgba(255, 255, 255, 0.04);
-  color: #e7edf6;
+  background-color: var(--app-field-bg);
+  color: var(--app-text);
 }
 input::placeholder,
 textarea::placeholder {
-  color: #6a7a92;
+  color: var(--color-slate-400);
 }
 
 /* ============================================================
@@ -137,11 +161,11 @@ textarea::placeholder {
 .card-lift {
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
   will-change: transform;
-  background-image: linear-gradient(155deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0) 55%);
+  background-image: linear-gradient(155deg, var(--sheen), transparent 55%);
 }
 .card-lift:hover {
   transform: translateY(-3px);
-  box-shadow: 0 16px 48px -16px rgba(26, 134, 230, 0.45);
+  box-shadow: 0 16px 48px -16px rgba(26, 134, 230, 0.4);
 }
 
 button:not(:disabled), a[href] {

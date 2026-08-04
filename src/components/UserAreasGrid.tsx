@@ -67,7 +67,7 @@ export default function UserAreasGrid({
               <Link
                 key={a.id}
                 href={`/area/${a.id}`}
-                className="group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 hover:border-white/20 card-lift press"
+                className="group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 hover:border-brand-400 card-lift press"
               >
                 <div
                   className={`pointer-events-none absolute -top-12 -right-10 h-36 w-36 rounded-full ${c.glow} opacity-[0.14] blur-3xl transition-opacity duration-300 group-hover:opacity-30`}

@@ -149,7 +149,7 @@ export default function AreasManager({
             return (
               <div
                 key={a.id}
-                className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 flex flex-col hover:border-white/20 card-lift"
+                className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 flex flex-col hover:border-brand-400 card-lift"
               >
                 <div
                   className={`pointer-events-none absolute -top-12 -right-10 h-36 w-36 rounded-full ${c.glow} opacity-[0.14] blur-3xl transition-opacity duration-300 group-hover:opacity-30`}
