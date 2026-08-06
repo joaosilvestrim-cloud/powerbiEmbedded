@@ -253,6 +253,25 @@ export async function removerUsuario(userId: string) {
   revalidatePath("/admin/usuarios");
 }
 
+// Edita nome e e-mail do usuário (e-mail também no Auth, se mudou).
+export async function editarUsuario(userId: string, nome: string, email: string) {
+  await assertAdmin();
+  const admin = createAdminClient();
+  const nomeT = nome.trim();
+  const emailT = email.trim().toLowerCase();
+  const patch: { email?: string; user_metadata?: Record<string, unknown> } = {
+    user_metadata: { nome: nomeT },
+  };
+  if (emailT) patch.email = emailT;
+  const { error } = await admin.auth.admin.updateUserById(userId, patch);
+  if (error) throw new Error(error.message);
+  await admin
+    .from("profiles")
+    .update({ nome: nomeT, ...(emailT ? { email: emailT } : {}) })
+    .eq("id", userId);
+  revalidatePath("/admin/usuarios");
+}
+
 export async function criarUsuario(formData: FormData) {
   const { tenantId } = await assertAdmin();
   const admin = createAdminClient();
