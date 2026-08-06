@@ -376,6 +376,15 @@ export default function UsuariosManager({
                       />
                       <div className="absolute right-0 mt-1 w-52 rounded-xl border border-slate-200 bg-white shadow-lg p-1 z-20 animate-scale-in origin-top-right">
                         <button
+                          onClick={() => {
+                            setMenu(null);
+                            setExpandido(u.id);
+                          }}
+                          className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-100"
+                        >
+                          <ShieldCheck className="h-4 w-4" /> Identidade RLS
+                        </button>
+                        <button
                           onClick={() => acaoSenha(u)}
                           className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-100"
                         >
@@ -408,7 +417,7 @@ export default function UsuariosManager({
                 </div>
               </div>
 
-              {exp && !isAdmin && (
+              {exp && (
                 <div className="bg-slate-50 px-4 py-3 border-t border-slate-100 animate-slide-down overflow-hidden space-y-3">
                   <label className="block text-xs text-slate-500">
                     Identidade RLS (filtro de dados — usado no RLS dinâmico do
@@ -428,6 +437,15 @@ export default function UsuariosManager({
                     />
                   </label>
 
+                  {isAdmin && (
+                    <p className="text-xs text-slate-400">
+                      Admin vê todas as áreas. A Identidade RLS acima só é usada
+                      quando o próprio admin abre um painel com RLS.
+                    </p>
+                  )}
+
+                  {!isAdmin && (
+                  <>
                   <div className="flex items-center justify-between mb-2">
                     <p className="text-xs font-medium text-slate-500">
                       Áreas liberadas para {u.nome || u.email}
@@ -511,6 +529,8 @@ export default function UsuariosManager({
                         );
                       })}
                     </div>
+                  )}
+                  </>
                   )}
                 </div>
               )}
