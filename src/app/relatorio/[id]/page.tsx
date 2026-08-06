@@ -69,7 +69,11 @@ export default async function RelatorioPage({
         atualId={relatorio.id}
       />
       {relatorio.embed_url ? (
-        <IframeViewer embedUrl={relatorio.embed_url} titulo={relatorio.nome} />
+        <IframeViewer
+          relatorioId={relatorio.id}
+          embedUrl={relatorio.embed_url}
+          titulo={relatorio.nome}
+        />
       ) : (
         <ReportViewer
           relatorioId={relatorio.id}

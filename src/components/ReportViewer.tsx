@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { PowerBIEmbed } from "powerbi-client-react";
-import { models } from "powerbi-client";
+import { models, service } from "powerbi-client";
 import { Maximize2, RefreshCw, AlertTriangle, ShieldAlert } from "lucide-react";
+import { registrarEventoPainel } from "@/lib/perf-client";
 import type { EmbedConfig } from "@/lib/types";
 
 interface Estado {
@@ -22,8 +23,18 @@ export default function ReportViewer({
   const [tentativa, setTentativa] = useState(0);
   const [estado, setEstado] = useState<Estado>({ key: "" });
   const wrapRef = useRef<HTMLDivElement>(null);
+  const inicioRef = useRef(0);
+  const carregadoRef = useRef(false);
 
   const reqKey = `${relatorioId}:${tentativa}`;
+
+  // Telemetria: registra a abertura uma vez ao abrir o painel.
+  useEffect(() => {
+    registrarEventoPainel({ relatorioId, tipo: "abertura" });
+    inicioRef.current =
+      typeof performance !== "undefined" ? performance.now() : 0;
+    carregadoRef.current = false;
+  }, [relatorioId]);
 
   useEffect(() => {
     let ativo = true;
@@ -44,11 +55,9 @@ export default function ReportViewer({
         const data = (await res.json()) as EmbedConfig;
         if (ativo) setEstado({ key: reqKey, config: data });
       } catch (e) {
-        if (ativo)
-          setEstado({
-            key: reqKey,
-            erro: e instanceof Error ? e.message : "Erro inesperado",
-          });
+        const msg = e instanceof Error ? e.message : "Erro inesperado";
+        registrarEventoPainel({ relatorioId, tipo: "erro", detalhe: msg });
+        if (ativo) setEstado({ key: reqKey, erro: msg });
       }
     })();
 
@@ -56,6 +65,42 @@ export default function ReportViewer({
       ativo = false;
     };
   }, [relatorioId, reqKey]);
+
+  // Handlers do Power BI (telemetria). Em useCallback: só rodam em runtime.
+  const onRendered = useCallback(() => {
+    if (carregadoRef.current) return;
+    carregadoRef.current = true;
+    const dur =
+      typeof performance !== "undefined" && inicioRef.current
+        ? performance.now() - inicioRef.current
+        : undefined;
+    registrarEventoPainel({ relatorioId, tipo: "carregado", duracaoMs: dur });
+  }, [relatorioId]);
+
+  const onError = useCallback(
+    (event?: service.ICustomEvent<unknown>) => {
+      const d = event?.detail as
+        | { message?: string; detailedMessage?: string }
+        | undefined;
+      registrarEventoPainel({
+        relatorioId,
+        tipo: "erro",
+        detalhe: (d && (d.message || d.detailedMessage)) || "Erro no Power BI",
+      });
+    },
+    [relatorioId]
+  );
+
+  /* eslint-disable react-hooks/refs -- refs só são lidos dentro dos handlers, em runtime */
+  const eventos = useMemo(
+    () =>
+      new Map<string, (event?: service.ICustomEvent<unknown>) => void>([
+        ["rendered", onRendered],
+        ["error", onError],
+      ]),
+    [onRendered, onError]
+  );
+  /* eslint-enable react-hooks/refs */
 
   function fullscreen() {
     wrapRef.current?.requestFullscreen?.();
@@ -137,6 +182,7 @@ export default function ReportViewer({
             background: models.BackgroundType.Default,
           },
         }}
+        eventHandlers={eventos}
         cssClassName="w-full h-[82vh]"
       />
       </div>

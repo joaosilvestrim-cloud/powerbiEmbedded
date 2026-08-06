@@ -9,6 +9,7 @@ import {
   Users,
   PlugZap,
   Building2,
+  Activity,
   type LucideIcon,
 } from "lucide-react";
 
@@ -27,6 +28,7 @@ export const adminItens: NavItem[] = [
   { href: "/admin", label: "Visão geral", icon: Gauge, exact: true },
   { href: "/admin/areas", label: "Áreas", icon: FolderKanban },
   { href: "/admin/usuarios", label: "Usuários", icon: Users },
+  { href: "/admin/performance", label: "Desempenho", icon: Activity },
   { href: "/admin/powerbi", label: "Power BI", icon: PlugZap },
 ];
 

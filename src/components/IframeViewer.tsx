@@ -1,18 +1,29 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Maximize2 } from "lucide-react";
+import { registrarEventoPainel } from "@/lib/perf-client";
 
 // Viewer simples para painéis incorporados por link (iframe / Publicar na web).
 // Não precisa de token: renderiza a URL diretamente.
 export default function IframeViewer({
+  relatorioId,
   embedUrl,
   titulo,
 }: {
+  relatorioId: string;
   embedUrl: string;
   titulo: string;
 }) {
   const wrapRef = useRef<HTMLDivElement>(null);
+  const inicioRef = useRef(0);
+
+  // Telemetria: abertura ao montar; tempo até o iframe carregar (onLoad).
+  useEffect(() => {
+    registrarEventoPainel({ relatorioId, tipo: "abertura" });
+    inicioRef.current =
+      typeof performance !== "undefined" ? performance.now() : 0;
+  }, [relatorioId]);
 
   return (
     <div
@@ -33,6 +44,17 @@ export default function IframeViewer({
         src={embedUrl}
         className="w-full h-[78vh] border-0"
         allowFullScreen
+        onLoad={() => {
+          const dur =
+            typeof performance !== "undefined" && inicioRef.current
+              ? performance.now() - inicioRef.current
+              : undefined;
+          registrarEventoPainel({
+            relatorioId,
+            tipo: "carregado",
+            duracaoMs: dur,
+          });
+        }}
       />
     </div>
   );
