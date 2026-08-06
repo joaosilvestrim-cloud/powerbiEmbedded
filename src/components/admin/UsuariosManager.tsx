@@ -311,7 +311,7 @@ export default function UsuariosManager({
                       <button
                         onClick={() => setExpandido(u.id)}
                         title="Este usuário tem acesso a painel com RLS mas está sem Identidade RLS"
-                        className="inline-flex items-center gap-1 rounded-full bg-amber-500/15 text-amber-300 px-2 py-0.5 text-[11px] font-medium"
+                        className="inline-flex items-center gap-1 rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[11px] font-medium text-amber-700 hover:bg-amber-100 transition"
                       >
                         <ShieldAlert className="h-3 w-3" /> sem identidade RLS
                       </button>
@@ -419,12 +419,32 @@ export default function UsuariosManager({
 
               {exp && (
                 <div className="bg-slate-50 px-4 py-3 border-t border-slate-100 animate-slide-down overflow-hidden space-y-3">
-                  <label className="block text-xs text-slate-500">
-                    Identidade RLS (filtro de dados — usado no RLS dinâmico do
-                    Power BI)
+                  <div className="rounded-xl border border-violet-200 bg-violet-50/60 p-3.5">
+                    <div className="mb-2 flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <ShieldCheck className="h-4 w-4 text-violet-700" />
+                        <span className="text-sm font-semibold text-slate-800">
+                          Identidade RLS
+                        </span>
+                      </div>
+                      {u.rls_identity ? (
+                        <span className="inline-flex items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-700">
+                          <CheckCircle2 className="h-3 w-3" /> configurada
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[11px] font-medium text-amber-700">
+                          <ShieldAlert className="h-3 w-3" /> em branco
+                        </span>
+                      )}
+                    </div>
+                    <p className="mb-2 text-xs leading-relaxed text-slate-500">
+                      O valor que a Microsoft usa para filtrar os dados desta
+                      pessoa nos painéis com RLS. Igual ao que está no modelo
+                      (e-mail, CNPJ ou código).
+                    </p>
                     <input
                       defaultValue={u.rls_identity ?? ""}
-                      placeholder="Ex.: 123 / cnpj do cliente / e-mail"
+                      placeholder="Ex.: joao@empresa.com"
                       onBlur={(e) => {
                         const v = e.target.value;
                         if (v !== (u.rls_identity ?? ""))
@@ -433,9 +453,16 @@ export default function UsuariosManager({
                             toast("Identidade RLS salva");
                           });
                       }}
-                      className="mt-1 w-full sm:max-w-sm rounded-lg border border-slate-300 px-3 py-2 text-sm font-mono"
+                      className="w-full sm:max-w-sm rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-mono focus:border-violet-300 focus:outline-none focus:ring-2 focus:ring-violet-400/40"
                     />
-                  </label>
+                    {!isAdmin && precisaRls && (
+                      <p className="mt-2 flex items-center gap-1.5 text-[11px] text-amber-700">
+                        <ShieldAlert className="h-3.5 w-3.5 shrink-0" />
+                        Este usuário acessa painel com RLS. Sem preencher, ele verá
+                        vazio.
+                      </p>
+                    )}
+                  </div>
 
                   {isAdmin && (
                     <p className="text-xs text-slate-400">
@@ -520,7 +547,7 @@ export default function UsuariosManager({
                             {rlsSet.has(a.id) && (
                               <span
                                 title="Área com painel que usa RLS"
-                                className="inline-flex items-center gap-1 text-[10px] text-violet-300"
+                                className="inline-flex items-center gap-1 rounded-full bg-violet-100 px-1.5 py-0.5 text-[10px] font-medium text-violet-700"
                               >
                                 <ShieldCheck className="h-3 w-3" /> RLS
                               </span>
